@@ -1,0 +1,96 @@
+﻿@using System.Globalization;
+
+@{
+    ViewBag.Title = "Login";
+    ViewBag.TituloCard = "";
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+    var cultura = new CultureInfo(@ViewData["Lang"].ToString() ?? "es");
+    var rm = new System.Resources.ResourceManager(typeof(IdiomaCondusef_DLL.Login.Login));
+    var rs = rm.GetResourceSet(cultura, true, true);
+}
+
+<section id="loginForm" class="py-3 px-5">
+    @using (Html.BeginForm("", "", FormMethod.Post, new { @class = "form-group", role = "form", id = "formLogIn" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="container-fluid p-0">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger alert alert-danger" })
+            <div class="container p-3">
+                <table class="table table-bordered table-striped">
+                    <tr style="background-color:#2F4E7C">
+                        <th>
+                            <h3 class="text-center" style="color:aliceblue">@rs.GetString("Bienvenido")</h3>
+                        </th>
+                    </tr>
+                    <tr style="background-color:#EDEEF0">
+                        <td class="p-3">
+                            <br />
+                            <h4 class="text-center">@rs.GetString("Titulo")</h4>
+                            <div class="form-horizontal tab-content mb-3">
+                                @Html.Label(string.Empty, string.Format("{0}", rs.GetString("Usuario")), new { @class = "control-label", @for = "email" })
+                                <div class="input-group mt-2">
+                                    <div class="input-group-text">
+                                        <i class="fa-solid fa-user"></i>
+                                    </div>
+                                    <input id="email" type="email" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-horizontal tab-content pass_show mb-3">
+                                @Html.Label(string.Empty, string.Format("{0}", rs.GetString("Password")), new { @class = "control-label", @for = "password" })
+                                <div class="input-group mt-2">
+                                    <div class="input-group-text">
+                                        <i class="fa-solid fa-lock"></i>
+                                    </div>
+                                    <input id="password" type="password" class="form-control" />
+                                </div>
+                            </div>
+                            @Html.Hidden("Remember", new { @class = "form-control" })
+                            <div class="form-horizontal tab-content mt-5">
+                                <div class="flex-row row">
+                                    <div class="col-6 order-0">
+                                        <button class="btn btn-primary btn-login btn-block w-100" type="button" id="btnLogin">@rs.GetString("BtnLogin")</button>
+                                    </div>
+                                    <div class="col-6 order-1">
+                                        <a asp-area="" asp-controller="Home" asp-action="ForgotPassword" class="btn btn-secondary btn-block w-100">
+                                            @rs.GetString("OlvidarPassword")
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-center mt-3">
+                                <span>¿No tienes una cuenta?
+                                    <a asp-area="" asp-controller="Home" asp-action="Prerregistro" class="none-decoration ms-2">
+                                        Empieza tu prerregistro
+                                    </a>
+                                </span>                                
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    }
+</section>
+
+@section Scripts {
+    <script type="text/javascript">
+        
+        var urlIngresar = '@Url.Action("Ingresar", "Home", new {Area = ""})';
+        var urlSolicitarCambio = '@Url.Action("Password_Solicitar_Cambio","Home",new { area=""})';
+        var textoScript = {
+            EmailLogin: `@Html.Raw(rs.GetString("EmailLogin"))`,
+            ErrorGenerico: `@Html.Raw(rs.GetString("ErrorGenerico"))`,
+            UsuarioCambio: `@Html.Raw(rs.GetString("UsuarioCambio"))`,
+            PasswordLogin: `@Html.Raw(rs.GetString("PasswordLogin"))`,
+            SolicitudCambio: `@Html.Raw(rs.GetString("SolicitudCambio"))`,
+            Validando: `@Html.Raw(rs.GetString("Validando"))`,
+            Ingresar: `@Html.Raw(rs.GetString("BtnLogin"))`,
+            errorLoginTitulo: `@Html.Raw(rs.GetString("MErrorLoginTitulo"))`,
+            errorLogin: `@Html.Raw(rs.GetString("MErrorLogin"))`,
+            errorCuentaDesactivada: `@Html.Raw(rs.GetString("MErrorCuentaDesactivada"))`,
+        }
+    </script>
+
+    <script src="~/js/Home/Login.js"></script>
+    @*@Scripts.RenderFormat("<script src='{0}' defer></script>", "~/scripts/home_login")*@
+}

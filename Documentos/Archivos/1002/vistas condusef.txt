@@ -1,0 +1,15 @@
+--Redeco
+Nombre archivo
+Ticket
+Periodo
+Estatus
+Editar
+
+
+--Reune
+Nombre archivo
+Ticket
+Periodo
+Estatus
+Editar
+Borrar

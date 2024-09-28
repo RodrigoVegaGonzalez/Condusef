@@ -1,0 +1,44 @@
+﻿@using System.Globalization;
+
+@{
+    ViewBag.Title = "Condusef";
+    ViewBag.TituloCard = "";
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+    //var cultura = new CultureInfo(Request.Cookies["lang"].Value?.ToString() ?? "es");
+    var cultura = new CultureInfo(@ViewData["Lang"].ToString() ?? "es");
+    var rm = new System.Resources.ResourceManager(typeof(IdiomaCondusef_DLL.Login.Login));
+    var rs = rm.GetResourceSet(cultura, true, true);
+}
+
+<div class="container-fluid p-0">
+    <div id="carousel-container" class="">
+        <div id="carouselInformacion" class="carousel slide carousel-fade" data-bs-ride="carousel">
+            <div class="carousel-indicators background-carousel-indicators">
+                <button type="button" data-bs-target="#carouselInformacion" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#carouselInformacion" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#carouselInformacion" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            </div>
+            <div class="carousel-inner p-5">
+                <div class="d-flex justify-content-center carousel-item active">
+                    <img src="~/assets/fecha.PNG" class="d-block" alt="Fechas de API CONDUSsEF">
+                </div>
+                <div class="d-flex justify-content-center carousel-item">
+                    <img src="~/assets/redeco.PNG" class="d-block" alt="Informacion de REDECO">
+                </div>
+                <div class="d-flex justify-content-center carousel-item">
+                    <img src="~/assets/reune.PNG" class="d-block" alt="Informacion de REUNE">
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselInformacion" data-bs-slide="prev">
+                <i class="fa-solid fa-angle-left carousel-control-icon"></i>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselInformacion" data-bs-slide="next">
+                <i class="fa-solid fa-angle-right carousel-control-icon"></i>
+                @* <span class="fa-angle-right carousel-control-icon" aria-hidden="true"></span> *@
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+    
+</div>

@@ -1,0 +1,297 @@
+﻿@using System.Globalization;
+
+@{
+    ViewBag.Title = "Administracion";
+    ViewBag.TituloCard = "";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    //var cultura = new CultureInfo(Request.Cookies["lang"].Value?.ToString() ?? "es");
+    var cultura = new CultureInfo("es");
+    var rm = new System.Resources.ResourceManager(typeof(IdiomaCondusef_DLL.Admin.Admin));
+    var rs = rm.GetResourceSet(cultura, true, true);
+}
+<style src="~/css/Admin/administracionEmpresas.css">
+
+</style>
+<div class="container-fluid p-0">
+    <div class="card">
+        <div class="card-header">
+            <span class="card-title">@rs.GetString("Empresas")</span>
+        </div>
+        <div class="card-body p-1">
+            <div class="container-fluid">
+                <div class="flex-row row">
+                    <div class="col-8">
+                        <div id="divTabla">
+                            <table class="table table-sm table-responsive w-100 d-block d-xl-table table-bordered table-striped selector" style="width:100%" id="tablaEmpresas">
+                                <thead class="dark-thead">
+                                    <tr>
+                                        <th scope="col" hidden>id</th>
+                                        <th scope="col">@rs.GetString("NombreEmpresa")</th>
+                                        <th scope="col">@rs.GetString("Estatus")</th>
+                                        <th scope="col"></th>
+                                        @*<th scope="col"></th>*@
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="lista-container flex-item">
+                            <table class="table table-sm w-100 d-block d-xl-table table-borderless selector dt-body-center" id="tablaPendientes" style="width:100%">
+                                <thead class="dark-thead">
+                                    <tr>
+                                        <th class=""></th>
+                                        <th class=""></th>
+                                        <th class="">@rs.GetString("ListaPendientes")</th>
+                                        <th class=""></th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="flex-row row">
+                <div class="col-12">
+                    <button type="button" class="btn btn-primary w-100 waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#modalEnviarSolicitud">@rs.GetString("AgregarEmpresa")</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalDetalles" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-dark" style="color:white">
+                <span class="modal-title"><strong>@rs.GetString("DetallesGrupo")</strong></span>
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
+                    <div class="card card-custom bg-white border-white border-0">
+                        <div class="card-body">
+                            <div class="flex-row row ">
+                                <div class="form-group col-8">
+                                    <input type="text" id="idGrupo" class="form-control" hidden />
+                                    @Html.Label("", string.Format("{0}", rs.GetString("RazonSocial")), htmlAttributes: new { @class = "control-label" })
+                                    <div class="col nopadding">
+                                        <div class="input-group">
+                                            @Html.Editor("RazonSocial", new { htmlAttributes = new { @class = "form-control", @autocomplete = "off" } })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-4">
+                                    <div class="col-3">
+                                        <div class="form-check ">
+                                            <input type="checkbox" name="RangoFechas" id="aqlist_busquedaLibre" class="checkbox-custom editaCIN" autocomplete="off" style="display: none" />
+                                            <div class="btn-group btn-block">
+                                                <label for="aqlist_busquedaLibre" class="btn btn-primary">
+                                                    <i id="btn-ok" class="fa-solid fa-check"></i>
+                                                    <i id="btn-rm" class="fa-solid fa-x"></i>
+                                                </label>
+                                                <label id="aqlist_busquedaLabel" class="active btn btn-light btn-block" for="aqlist_busquedaLibre">@rs.GetString("BusquedaClientes")</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex-row row" style="">
+                                <div class="form-group col-3">
+                                    @Html.Label("", string.Format("{0}", rs.GetString("RFC")), htmlAttributes: new { @class = "control-label" })
+                                    <div class="col nopadding">
+                                        <div class="input-group">
+                                            @Html.Editor("RFC", new { htmlAttributes = new { @class = "form-control", @autocomplete = "off", @style = "text-transform:uppercase" } })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-5">
+                                    @Html.Label("", string.Format("{0}", rs.GetString("Email")), htmlAttributes: new { @class = "control-label" })
+                                    <div class="col nopadding">
+                                        <div class="input-group">
+                                            @Html.Editor("Email", new { htmlAttributes = new { @class = "form-control", @autocomplete = "off", @style = "text-transform:uppercase" } })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-3">
+                                    @Html.Label("", string.Format("{0}", rs.GetString("Telefono")), htmlAttributes: new { @class = "control-label" })
+                                    <div class="col nopadding">
+                                        <div class="input-group">
+                                            @Html.Editor("Telefono", new { htmlAttributes = new { @class = "form-control", @autocomplete = "off", @style = "text-transform:uppercase" } })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex-row row ">
+                                <div class="form-group col-4">
+                                    @Html.Label("", string.Format("{0}", rs.GetString("Calle")), htmlAttributes: new { @class = "control-label" })
+                                    <div class="col nopadding">
+                                        <div class="input-group">
+                                            @Html.Editor("Calle", new { htmlAttributes = new { @class = "form-control", @autocomplete = "off", @style = "text-transform:uppercase" } })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-2">
+                                    @Html.Label("", string.Format("{0}", rs.GetString("NumExt")), htmlAttributes: new { @class = "control-label" })
+                                    <div class="col nopadding">
+                                        <div class="input-group">
+                                            @Html.Editor("NumExt", new { htmlAttributes = new { @class = "form-control", @autocomplete = "off", @style = "text-transform:uppercase" } })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-2">
+                                    @Html.Label("", string.Format("{0}", rs.GetString("NumInt")), htmlAttributes: new { @class = "control-label" })
+                                    <div class="col nopadding">
+                                        <div class="input-group">
+                                            @Html.Editor("NumInt", new { htmlAttributes = new { @class = "form-control", @autocomplete = "off", @style = "text-transform:uppercase" } })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-3">
+                                    @Html.Label("", string.Format("{0}", rs.GetString("Colonia")), htmlAttributes: new { @class = "control-label" })
+                                    <div class="col nopadding">
+                                        <div class="input-group">
+                                            @Html.Editor("Colonia", new { htmlAttributes = new { @class = "form-control", @autocomplete = "off", @style = "text-transform:uppercase" } })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex-row row ">
+                                <div class="form-group col-4">
+                                    @Html.Label("", string.Format("{0}", rs.GetString("CP")), htmlAttributes: new { @class = "control-label" })
+                                    <div class="col nopadding">
+                                        <div class="input-group">
+                                            @Html.Editor("CP", new { htmlAttributes = new { @class = "form-control", @autocomplete = "off", @style = "text-transform:uppercase" } })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-2">
+                                    @Html.Label("", string.Format("{0}", rs.GetString("Municipio")), htmlAttributes: new { @class = "control-label" })
+                                    <div class="col nopadding">
+                                        <div class="input-group">
+                                            @Html.Editor("Municipio", new { htmlAttributes = new { @class = "form-control", @autocomplete = "off", @style = "text-transform:uppercase" } })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-4">
+                                    @Html.Label("", string.Format("{0}", rs.GetString("Estado")), htmlAttributes: new { @class = "control-label" })
+                                    <div class="col nopadding">
+                                        <div class="input-group">
+                                            @Html.Editor("Estado", new { htmlAttributes = new { @class = "form-control", @autocomplete = "off", @style = "text-transform:uppercase" } })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="container-fluid p-0">
+                                <div class="card">
+                                    <div class="card-body p-1">
+                                        <div class="container-fluid">
+                                            <div id="divTabla">
+                                                <table class="table table-sm table-responsive w-100 d-block d-xl-table table-bordered table-striped selector" style="width:100%" id="tablaRelacionadas">
+                                                    <thead class="table-dark">
+                                                        <tr>
+                                                            <th scope="col"></th>
+                                                            <th scope="col">@rs.GetString("Usuarios")</th>
+                                                        </tr>
+                                                    </thead>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br /><br /><br /><br /><br /><br />
+                            <div class="flex-row row">
+                            </div>
+                            <div class="flex-row row">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="col-12">
+                        <button type="button" id="RegresarDetalle" class="btn btn-danger btn-block waves-effect waves-light" data-bs-dismiss="modal">@rs.GetString("Regresar")</button>
+                        @*<div class="flex-row row  altaInterna">
+                        <div class="col-6">
+                        <button type="button" id="RegresarDetalle" class="btn btn-danger btn-block waves-effect waves-light" data-bs-dismiss="modal">@rs.GetString("Regresar")</button>
+                        </div>
+                        <div class="col-6">
+                        <button type="button" id="GuardarInterna" class="btn btn-info btn-block waves-effect waves-light">@rs.GetString("Guardar")</button>
+                        </div>
+                        </div>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modalEnviarSolicitud" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group col-12">
+                    @Html.Label("", string.Format("{0}", rs.GetString("Email")), htmlAttributes: new { @class = "control-label" })
+                    <div class="col nopadding">
+                        <div class="input-group">
+                            @Html.Editor("EmailSolicitud", new { htmlAttributes = new { @class = "form-control", @autocomplete = "off" } })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-block" data-bs-dismiss="modal">@rs.GetString("Cerrar")</button>
+                <button id="enviar-btn" type="button" class="btn btn-primary btn-block">@rs.GetString("EnviarSolicitud")</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+
+        var urlEnviarSolicitud = '@Url.Action("Ingresar", "Home", new { Area = "" })';
+        var urlSolicitarCambio = '@Url.Action("Password_Solicitar_Cambio", "Home", new { area = "" })';
+        var textoScript = {
+            primero: `@Html.Raw(rs.GetString("TPrimero"))`,
+            anterior: `@Html.Raw(rs.GetString("TAnterior"))`,
+            siguiente: `@Html.Raw(rs.GetString("TSiguiente"))`,
+            ultimo: `@Html.Raw(rs.GetString("TUltimo"))`,
+            inicio: `@Html.Raw(rs.GetString("TInicio"))`,
+            mostrar: `@Html.Raw(rs.GetString("Mostrar"))`,
+            buscar: `@Html.Raw(rs.GetString("Buscar"))`,
+            buscando: `@Html.Raw(rs.GetString("Buscando"))`,
+            cargandoRegistros: `@Html.Raw(rs.GetString("CargandoRegistros"))`,
+            sinDatos: `@Html.Raw(rs.GetString("TSinDatos"))`,
+            noseencontraron: `@Html.Raw(rs.GetString("NoSeEncontraron"))`,
+
+            si: `@Html.Raw(rs.GetString("Si"))`,
+            no: `@Html.Raw(rs.GetString("No"))`,
+            eliminar: `@Html.Raw(rs.GetString("Eliminar"))`,
+            detalles: `@Html.Raw(rs.GetString("Detalles"))`,
+
+
+            EmailLogin: `@Html.Raw(rs.GetString("EmailLogin"))`,
+            ErrorGenerico: `@Html.Raw(rs.GetString("ErrorGenerico"))`,
+            UsuarioCambio: `@Html.Raw(rs.GetString("UsuarioCambio"))`,
+            PasswordLogin: `@Html.Raw(rs.GetString("PasswordLogin"))`,
+            SolicitudCambio: `@Html.Raw(rs.GetString("SolicitudCambio"))`,
+            Validando: `@Html.Raw(rs.GetString("Validando"))`,
+            Ingresar: `@Html.Raw(rs.GetString("BtnLogin"))`,
+            errorLoginTitulo: `@Html.Raw(rs.GetString("MErrorLoginTitulo"))`,
+            errorLogin: `@Html.Raw(rs.GetString("MErrorLogin"))`,
+        }
+    </script>
+
+    <script src="~/js/Admin/administracionEmpresas.js"></script>
+    @*@Scripts.RenderFormat("<script src='{0}' defer></script>", "~/scripts/home_login")*@
+}
+

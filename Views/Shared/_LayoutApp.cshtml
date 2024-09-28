@@ -1,0 +1,392 @@
+﻿@using System.Security.Claims
+@{
+    var cultura = new System.Globalization.CultureInfo(@ViewData["Lang"].ToString() ?? "es");
+    var rm = new System.Resources.ResourceManager(typeof(IdiomaCondusef_DLL.MenusLayout.Layout));
+    var rs = rm.GetResourceSet(cultura, true, true);
+}
+<!DOCTYPE html>
+<html lang="@ViewData["Lang"].ToString()">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#fafafa" />
+    <meta name="description" content="@ViewBag.Title" />
+    <title>@ViewBag.Title</title>
+    <link rel="icon" href="~/favicon.png" type="image/x-icon" />
+    <link href="~/lib/font-awesome_6.4.2/css/all.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/dataTable/datatables.min.css" />
+    <link rel="stylesheet" href="~/lib/dataTable.buttons/css/buttons.dataTables.min.css" />
+    <link href="~/lib/select2/css/select2.min.css" rel="stylesheet" />
+    @Html.AntiForgeryToken()
+
+    <link rel="stylesheet" href="~/css/Shared/layout.css">
+    <link rel="stylesheet" href="~/css/Shared/layoutApp.css" />
+    
+    
+</head>
+<body>
+    <div class="content">
+        <div id="loading-panel" class="loading-panel" style="display: none">
+            <div class="panel-container">
+                <span class="loader"></span>
+            </div>
+        </div>
+        <div class="wrapper">
+            <div class="container-fluid p-0">
+                <div id="content" class="container-fluid p-0">
+                    <nav class="navbar navbar-expand-lg navbar-dark bg-light">
+                        <div class="container-fluid">
+                            <div class="col-3">
+                                <button type="button" id="botonMenu" class="btn btn-light sidebar-btn" aria-label="Menu">
+                                    <i class="fa-solid fa-bars icon"></i>
+                                </button>
+                            </div>
+                            <div class="nav navbar-nav nav-center col-6 center">
+                                <h5 class="text-center">@ViewBag.TituloCard</h5>
+                            </div>
+                            <div class="collapse navbar-collapse " id="navbarNavDarkDropdown">
+                                <div class="right-btn__container ms-auto">
+                                    <ul class="navbar-nav">
+                                        <li class="nav-item dropdown">
+                                            <a class="nav-link dropdown-toggle dropdown-btn" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="fa-solid fa-bell icon"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    <ul class="navbar-nav">
+                                        <li class="nav-item dropdown">
+                                            <a class="nav-link dropdown-toggle dropdown-btn" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="fa-solid fa-language icon"></i>
+                                            </a>
+                                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu">
+                                                <li><a class="dropdown-item" onclick="cambiarIdioma('es')">@rs.GetString("Español")</a></li>
+                                                <li><hr class="dropdown-divider"></li>
+                                                <li><a class="dropdown-item" onclick="cambiarIdioma('en')">@rs.GetString("Ingles")</a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                    <ul class="navbar-nav">
+                                        <li class="nav-item dropdown">
+                                            <a class="nav-link dropdown-toggle dropdown-btn" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="fa-solid fa-circle-half-stroke icon"></i>
+                                            </a>
+                                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu">
+                                                <li><a class="dropdown-item" onclick=""><i class="fa-solid fa-sun me-2"></i>@rs.GetString("Claro")</a></li>
+                                                <li><hr class="dropdown-divider"></li>
+                                                <li><a class="dropdown-item" onclick=""><i class="fa-solid fa-moon me-2"></i>@rs.GetString("Oscuro")</a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                    <ul class="navbar-nav">
+                                        <li class="nav-item dropdown">
+                                            <a id="config-btn" class="nav-link dropdown-toggle dropdown-btn" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i id="config-icon" class="fa-solid fa-gear icon"></i>
+                                            </a>
+                                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu">
+                                                <li><p class="dropdown-item text-black-50 m-0 aUser" style="font-size: 0.8em;">@* <i class="fa-solid fa-user"></i> *@@User.Identity.Name</p></li>
+                                                <li><hr class="dropdown-divider"></li>
+                                                @if (User.IsInRole("1"))
+                                                {
+                                                    <li><a class="dropdown-item aUser" href='@Url.Action("Configuracion", "Condusef", new {Area = "" })'><i class="fa-solid fa-sliders me-2"></i>@rs.GetString("Config")</a></li>
+                                                    <li><hr class="dropdown-divider"></li>
+                                                }
+                                                <li><a class="dropdown-item aUser" onclick="" id="logout-btn"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>@rs.GetString("Logout")</a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </nav>
+                    <div id="sidebar-container" class="sidebar-container" style="display: none;">
+                        <nav id="sidebar" class="sidebar">
+                            <div class="sidebar-header top-sidebar">
+                                <h3 class="centrar-elemento">Condusef</h3>
+                                <div id="dismiss">
+                                    <button id="close-sidebar-btn" class="close-sidebar-btn">
+                                        <div class="icon-container">
+                                            <i class="fa-solid fa-arrow-left sidebar-icon"></i>
+                                        </div>
+                                    </button>
+                                </div>
+                            </div>
+                            <ul class="list-unstyled components">
+                                <li class="sidebar-li">
+                                    <a class="sidebar-a" href='@Url.Action("Condusef_Home", "Condusef", new {Area = "" })' aria-label="Menú principal">
+                                        <div class="icon-container">
+                                            <i class="fas fa-home sidebar-icon"></i>
+                                        </div>
+                                        <span>@rs.GetString("Inicio")</span>
+                                    </a>
+                                </li>
+                                @if (User.IsInRole("2"))
+                                {
+
+                                    <li id="lisubMenuConsultas" class="">
+                                        <div class="sidebar-list-item sidebar-list-item-color dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#collapseRedeco" aria-expanded="false" aria-controls="collapseToken">
+                                            <div class="icon-container">
+                                                <i class="fa-solid fa-circle-dollar-to-slot sidebar-icon"></i>
+                                            </div>
+                                            <span>@rs.GetString("Redeco")</span>
+                                        </div>
+                                        <div class="collapse collapse-space" id="collapseRedeco">
+                                            <ul class="list-unstyled">
+                                                <li id="" class="">
+                                                    <a asp-area="" asp-controller="Redeco" asp-action="EnviarQuejas" class="none-decoration ">
+                                                        <span class="sidebar-list-item-a sidebar-list-item-color">@rs.GetString("EnviarRedeco")</span>
+                                                    </a>
+                                                </li>
+                                                <li id="" class="">
+                                                    <a asp-area="" asp-controller="Redeco" asp-action="ConsultarQuejas" class="none-decoration">
+                                                        <span class="sidebar-list-item-a sidebar-list-item-color">@rs.GetString("ConsultarRedeco")</span>
+                                                    </a>
+                                                </li>
+                                                <li id="" class="">
+                                                    <a asp-area="" asp-controller="Redeco" asp-action="SubirLayoutQuejas" class="none-decoration">
+                                                        <span class="sidebar-list-item-a sidebar-list-item-color">@rs.GetString("SubirLayout")</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
+
+                                    <li id="lisubMenuConsultas" class="">
+                                        <div class="sidebar-list-item sidebar-list-item-color dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#collapseReune" aria-expanded="false" aria-controls="collapseToken">
+                                            <div class="icon-container">
+                                                <i class="fa-solid fa-building-columns sidebar-icon"></i>
+                                            </div>
+                                            <span>@rs.GetString("Reune")</span>
+                                        </div>
+                                        <div class="collapse collapse-space" id="collapseReune">
+                                            <ul class="list-unstyled">
+                                                <li id="" class="">
+                                                    <div class="sidebar-list-item-subtitle sidebar-list-item-color" data-bs-toggle="collapse" data-bs-target="#collapseConsultas" aria-expanded="false" aria-controls="collapseConsultas">
+                                                        <div class="icon-container">
+                                                            <i class="fa-solid fa-question sidebar-icon"></i>
+                                                        </div>
+                                                        <span>@rs.GetString("Consultas")</span>
+                                                    </div>
+                                                    <div class="collapse collapse-space" id="collapseConsultas">
+                                                        <ul class="list-unstyled">
+                                                            <li id="" class="">
+                                                                <a asp-area="" asp-controller="Reune" asp-action="Consultas" class="none-decoration ">
+                                                                    <span class="sidebar-list-item-a sidebar-list-item-color">@rs.GetString("EnviarConsultas")</span>
+                                                                </a>
+                                                            </li>
+                                                            <li id="" class="">
+                                                                <a asp-area="" asp-controller="Reune" asp-action="BuscarConsultas" class="none-decoration">
+                                                                    <span class="sidebar-list-item-a sidebar-list-item-color">@rs.GetString("BuscarConsultas")</span>
+                                                                </a>
+                                                            </li>
+                                                            <li id="" class="">
+                                                                <a asp-area="" asp-controller="Reune" asp-action="SubirLayoutConsultas" class="none-decoration">
+                                                                    <span class="sidebar-list-item-a sidebar-list-item-color">@rs.GetString("SubirLayout")</span>
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </li>
+                                                <li id="" class="">
+                                                    <div class="sidebar-list-item-subtitle sidebar-list-item-color" data-bs-toggle="collapse" data-bs-target="#collapseReclamaciones" aria-expanded="false" aria-controls="collapseReclamaciones">
+                                                        <div class="icon-container">
+                                                            <i class="fa-solid fa-triangle-exclamation sidebar-icon"></i>
+                                                        </div>
+                                                        <span>@rs.GetString("Reclamaciones")</span>
+                                                    </div>
+                                                    <div class="collapse collapse-space" id="collapseReclamaciones">
+                                                        <ul class="list-unstyled">
+                                                            <li id="" class="">
+                                                                <a asp-area="" asp-controller="Reune" asp-action="Reclamaciones" class="none-decoration ">
+                                                                    <span class="sidebar-list-item-a sidebar-list-item-color">@rs.GetString("EnviarReclamaciones")</span>
+                                                                </a>
+                                                            </li>
+                                                            <li id="" class="">
+                                                                <a asp-area="" asp-controller="Reune" asp-action="ConsultarReclamaciones" class="none-decoration">
+                                                                    <span class="sidebar-list-item-a sidebar-list-item-color">@rs.GetString("ConsultarReclamaciones")</span>
+                                                                </a>
+                                                            </li>
+                                                            <li id="" class="">
+                                                                <a asp-area="" asp-controller="Reune" asp-action="SubirLayoutReclamaciones" class="none-decoration">
+                                                                    <span class="sidebar-list-item-a sidebar-list-item-color">@rs.GetString("SubirLayout")</span>
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </li>
+                                                <li id="" class="">
+                                                    <div class="sidebar-list-item-subtitle sidebar-list-item-color" data-bs-toggle="collapse" data-bs-target="#collapseAclaraciones" aria-expanded="false" aria-controls="collapseAclaraciones">
+                                                        <div class="icon-container">
+                                                            <i class="fa-solid fa-circle-info sidebar-icon"></i>
+                                                        </div>
+                                                        <span>@rs.GetString("Aclaraciones")</span>
+                                                    </div>
+                                                    <div class="collapse collapse-space" id="collapseAclaraciones">
+                                                        <ul class="list-unstyled">
+                                                            <li id="" class="">
+                                                                <a asp-area="" asp-controller="Reune" asp-action="Aclaraciones" class="none-decoration ">
+                                                                    <span class="sidebar-list-item-a sidebar-list-item-color">@rs.GetString("EnviarAclaraciones")</span>
+                                                                </a>
+                                                            </li>
+                                                            <li id="" class="">
+                                                                <a asp-area="" asp-controller="Reune" asp-action="ConsultarAclaraciones" class="none-decoration">
+                                                                    <span class="sidebar-list-item-a sidebar-list-item-color">@rs.GetString("ConsultarAclaraciones")</span>
+                                                                </a>
+                                                            </li>
+                                                            <li id="" class="">
+                                                                <a asp-area="" asp-controller="Reune" asp-action="SubirLayoutAclaraciones" class="none-decoration">
+                                                                    <span class="sidebar-list-item-a sidebar-list-item-color">@rs.GetString("SubirLayout")</span>
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
+
+                                    @* <li id="lisubMenuConsultas" class="">
+                                <div class="sidebar-list-item sidebar-list-item-color dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#collapseConsultas" aria-expanded="false" aria-controls="collapseToken">
+                                <div class="icon-container">
+                                <i class="fa-solid fa-question sidebar-icon"></i>
+                                </div>
+                                <span>@rs.GetString("Consultas")</span>
+                                </div>
+                                <div class="collapse collapse-space" id="collapseConsultas">
+                                <ul class="list-unstyled">
+                                <li id="" class="">
+                                <a asp-area="" asp-controller="Reune" asp-action="Consultas" class="none-decoration">
+                                <span class="sidebar-list-item-a sidebar-list-item-color">@rs.GetString("EnviarConsultas")</span>
+                                </a>
+                                </li>
+                                <li id="" class="">
+                                <a asp-area="" asp-controller="Reune" asp-action="BuscarConsultas" class="none-decoration">
+                                <span class="sidebar-list-item-a sidebar-list-item-color">@rs.GetString("BuscarConsultas")</span>
+                                </a>
+                                </li>
+                                <li id="" class="">
+                                <a asp-area="" asp-controller="Redeco" asp-action="" class="none-decoration">
+                                <span class="sidebar-list-item-a sidebar-list-item-color">@rs.GetString("SubirLayout")</span>
+                                </a>
+                                </li>
+                                </ul>
+                                </div>
+                                </li>
+
+                                <li id="lisubMenuConsultas" class="">
+                                <div class="sidebar-list-item sidebar-list-item-color dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#collapseReclamaciones" aria-expanded="false" aria-controls="collapseToken">
+                                <div class="icon-container">
+                                <i class="fa-solid fa-building-columns sidebar-icon"></i>
+                                </div>
+                                <span>@rs.GetString("Reclamaciones")</span>
+                                </div>
+                                <div class="collapse collapse-space" id="collapseReclamaciones">
+                                <ul class="list-unstyled">
+                                <li id="" class="">
+                                <a asp-area="" asp-controller="Reune" asp-action="Reclamaciones" class="none-decoration">
+                                <span class="sidebar-list-item-a sidebar-list-item-color">@rs.GetString("EnviarReclamaciones")</span>
+                                </a>
+                                </li>
+                                <li id="" class="">
+                                <a asp-area="" asp-controller="Reune" asp-action="ConsultarReclamaciones" class="none-decoration">
+                                <span class="sidebar-list-item-a sidebar-list-item-color">@rs.GetString("ConsultarReclamaciones")</span>
+                                </a>
+                                </li>
+                                <li id="" class="">
+                                <a asp-area="" asp-controller="Redeco" asp-action="" class="none-decoration">
+                                <span class="sidebar-list-item-a sidebar-list-item-color">@rs.GetString("SubirLayout")</span>
+                                </a>
+                                </li>
+                                </ul>
+                                </div>
+                                </li>
+
+                                <li id="lisubMenuConsultas" class="">
+                                <div class="sidebar-list-item sidebar-list-item-color dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#collapseAclaraciones" aria-expanded="false" aria-controls="collapseToken">
+                                <div class="icon-container">
+                                <i class="fa-solid fa-circle-info sidebar-icon"></i>
+                                </div>
+                                <span>@rs.GetString("Aclaraciones")</span>
+                                </div>
+                                <div class="collapse collapse-space" id="collapseAclaraciones">
+                                <ul class="list-unstyled">
+                                <li id="" class="">
+                                <a asp-area="" asp-controller="Reune" asp-action="Aclaraciones" class="none-decoration ">
+                                <span class="sidebar-list-item-a sidebar-list-item-color">@rs.GetString("EnviarAclaraciones")</span>
+                                </a>
+                                </li>
+                                <li id="" class="">
+                                <a asp-area="" asp-controller="Reune" asp-action="ConsultarAclaraciones" class="none-decoration ">
+                                <span class="sidebar-list-item-a sidebar-list-item-color">@rs.GetString("ConsultarAclaraciones")</span>
+                                </a>
+                                </li>
+                                <li id="" class="">
+                                <a asp-area="" asp-controller="Reune" asp-action="" class="none-decoration">
+                                <span class="sidebar-list-item-a sidebar-list-item-color">@rs.GetString("SubirLayout")</span>
+                                </a>
+                                </li>
+                                </ul>
+                                </div>
+                                </li> *@
+                                }
+
+                                @* <li id="lisubMenuReportes" class="sidebar-li">
+                                    <a href="#subMenuReportes" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle sidebar-a">
+                                        <div class="icon-container">
+                                            <i class="fa-solid fa-file-invoice sidebar-icon"></i>
+                                        </div>
+                                        <span>@rs.GetString("Reportes")</span>
+                                    </a>
+                                    <ul class="collapse list-unstyled" id="subMenuReportes"></ul>
+                                </li> *@
+                            </ul>
+                            <div class="">
+                                <p class="article">&copy; @DateTime.Now.Year - Info100 SA. de CV.</p>
+                            </div>
+                        </nav>
+                        @* <div id="sidebar-shadow" class="sidebar-shadow test-color"></div> *@
+                    </div>
+
+                    <div id="" class="empresa-card">
+                        @User.FindFirst("Empresa").Value
+                    </div>
+
+                    <div class="container-fluid p-0" id="contenedorInicial">
+                        @RenderBody()
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="footer">
+        <div class="text-center">© Desarrollado por Info100 S.A. de C.V</div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery-3.7.1.min.js"></script>
+    <script src="~/lib/dataTable.buttons/js/jszip.min.js"></script>
+    <script src="~/lib/dataTable.buttons/js/pdfmake.min.js"></script>
+    <script src="~/lib/dataTable.buttons/js/vfs_fonts.js"></script>
+    <script src="~/lib/dataTable/datatables.min.js"></script>
+    <script src="~/lib/dataTable.buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/lib/dataTable.buttons/js/buttons.html5.min.js"></script>
+    <script src="~/lib/font-awesome_6.4.2/js/all.min.js"></script>
+    <script src="~/lib/sweetalert2/sweetalert2.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/select2/js/select2.min.js"></script>
+
+
+    <script defer src="~/js/Shared/layout.js"></script>
+    <script defer src="~/js/Shared/layoutApp.js"></script>
+    <script defer src="~/js/Generales/fntGenericas.js"></script>
+</body>
+</html>
+
+<script type="text/javascript">
+    var urlCambiarIdioma = '@Url.Action("Cambiar_Idioma", "Home")';
+    var urlLogout = '@Url.Action("CondusefLogout", "Condusef", new { Area = "" })';
+
+</script>
+
+
+@*@Scripts.RenderFormat("<script src='{0}' defer></script>", "~/scripts/layout_principal")*@
+@RenderSection("scripts", false)

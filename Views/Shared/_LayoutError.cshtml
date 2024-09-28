@@ -1,0 +1,24 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <!-- Google font -->
+    <link href="https://fonts.googleapis.com/css?family=Maven+Pro:400,900" rel="stylesheet">
+
+    <!-- Custom stlylesheet -->
+    <!-- Error y NotFound -->
+    <link type="text/css" rel="stylesheet" href="~/css/Home/error.css" />
+
+
+</head>
+<body>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

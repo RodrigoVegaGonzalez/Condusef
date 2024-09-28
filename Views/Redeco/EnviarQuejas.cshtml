@@ -1,0 +1,574 @@
+﻿@using System.Globalization;
+
+@model Condusef_DLL.Funciones.Condusef.Redeco
+@{
+    var cultura = new CultureInfo(@ViewData["Lang"].ToString() ?? "es");
+    var rm = new System.Resources.ResourceManager(typeof(IdiomaCondusef_DLL.Condusef.Condusef));
+    var rs = rm.GetResourceSet(cultura, true, true);
+    ViewBag.Title = "Enviar quejas | " + rs.GetString("Redeco");
+    ViewBag.TituloCard = rs.GetString("EnviarRedeco");
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+}
+
+<style>
+    .right-padding-3 {
+        padding: 0 5em 0 0;
+    }
+
+    .btn-info{
+        color: white!important;
+    }
+</style>
+
+<div class="container-fluid p-0">
+    <div class="card table-borderless">
+        @* <div class="card-header">
+            <span class="card-title title">@rs.GetString("EnviarRedeco")</span>
+        </div> *@
+        <div class="card-body p-1">
+            <div class="container-fluid p-5">
+                <input type="hidden" id="institucion-clave" value="@User.FindFirst("Empresa")?.Value" />
+                <input type="hidden" id="sector" value="@User.FindFirst("Sector")?.Value" />
+                <input type="hidden" id="indice-fila" />
+                <div class="flex-row row mb-4 justify-content-between">
+                    <div class="col-2" >
+                        <button class="btn btn-success btn-block" id="btn_abrirModalQueja" data-bs-toggle="modal" data-bs-target="#modalAgregarQueja"><i class="fas fa-plus" style="margin-right: 0.5rem"></i> @rs.GetString("AgregarQuejaBtn")</button>
+                    </div>
+                    <div class="col-2 ml-auto">
+                        <button id="btn_agregarDatosFicticios" class="btn btn-warning btn-block"><i class="fa-solid fa-rotate" style="margin-right: 0.5rem"></i>@rs.GetString("AgregarDatosFicticios")</button>
+                    </div>
+                    <div class="col-2 ml-auto">
+                        <button id="btn_subirQuejas" class="btn btn-info btn-block"><i class="fa-solid fa-cloud-arrow-up" style="margin-right: 0.5rem"></i>@rs.GetString("SubirQuejas")</button>
+                    </div>
+                </div>
+                <div class="flex-row row mb-4 justify-content-between" style="display:none;">
+                    <div class="col-2">
+                        <button class="btn btn-success btn-block" id="btn_ListadoErrores" data-bs-toggle="modal" data-bs-target="#modalListadoErrores"><i class="fas fa-plus" style="margin-right: 0.5rem"></i> @rs.GetString("AgregarQuejaBtn")</button>
+                        <button class="btn btn-success btn-block" id="btn_ErroresQueja" data-bs-toggle="modal" data-bs-target="#modalErroresQueja"><i class="fas fa-plus" style="margin-right: 0.5rem"></i> @rs.GetString("AgregarQuejaBtn")</button>
+                    </div>
+                </div>
+                <div class="flex-row row mt-3">
+                    <div class="col">
+                        <div class="" id="Scroll">
+                            <table class="table table-sm table-responsive w-100 d-block d-xl-table table-bordered table-striped selector dt-body-center pt-3" id="tablaQuejas" style="width:100%">
+                                <thead class="dark-thead">
+                                    <tr>
+                                        <th></th>
+                                        <th></th>
+                                        <th class="">@rs.GetString("QuejaFolio")</th>
+                                        <th class="">@rs.GetString("TQuejaFechaRecepcion")</th>
+                                        <th class="">@rs.GetString("TMedioRecepcion")</th>
+                                        <th class="">@rs.GetString("TNivelAtencion")</th>
+                                        <th class="">@rs.GetString("ProductoServicio")</th>
+                                        <th class="">@rs.GetString("QuejaCausa")</th>
+                                        <th class="">@rs.GetString("QuejaEstatus")</th>
+                                        <th class="">@rs.GetString("TipoPersona")</th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @* <button id="consulta-btn" class="btn btn-warning">Consulta</button> *@
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade modal-selectitems" id="modalAgregarQueja" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">@rs.GetString("AgregarQuejaTitulo")</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body px-4">
+                <div class="flex-row row my-2">
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label class="mb-2" for="password">@rs.GetString("PeriodoQueja")</label>
+                            <div class="input-group mb-3">
+                                <div class="col nopadding">
+                                    @Html.DropDownListFor(model => model.QuejasRedeco.QuejasNoMes, new SelectList(Model.Meses, "Id", "Descripcion"), string.Format("{0}", rs.GetString("SeleccionDeOpcion")), new { @class = "select-form selectitems", @id = "QuejasNoMes", @data_live_search = "true", @data_live_search_normalize = "true"})
+                                </div>
+                                <span class="input-group-text" id="anioActual"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            @Html.Label("", string.Format("{0}", rs.GetString("QuejaFolio")), new { @class = "label-control mb-2" })
+                            <div class="col nopadding">
+                                <div class="input-group">
+                                    @Html.EditorFor(model => model.QuejasRedeco.QuejasFolio, new { htmlAttributes = new { @class = "form-control", @id = "QuejasFolio", @autocomplete = "off" } })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            @Html.Label("", string.Format("{0}", rs.GetString("NumeroConsultas")), new { @class = "label-control mb-2" })
+                            <div class="col nopadding">
+                                <div class="input-group">
+                                    @Html.EditorFor(model => model.QuejasRedeco.QuejasNum, new { htmlAttributes = new { @class = "form-control", @id = "QuejasNum", @type = "number", @min = "1" } })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            @Html.Label("", string.Format("{0}", rs.GetString("FechaRecepcion")), new { @class = "label-control mb-2" })
+                            <div class="col nopadding">
+                                <div class="input-group">
+                                    @Html.EditorFor(model => model.QuejasRedeco.QuejasFecRecepcion, new { htmlAttributes = new { @type="date", @class = "form-control", @id = "QuejasFecRecepcion", @autocomplete = "off" } })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="flex-row row my-3">
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label class="mb-2" for="password">@rs.GetString("MedioRecepcion")</label>
+                            <div class="col nopadding">
+                                @* @Html.EditorFor(model => model.QuejasRedeco.QuejasMedio, new { htmlAttributes = new { @class = "form-control", @id = "QuejasMedio", @autocomplete = "off" } }) *@
+                                @Html.DropDownListFor(model => model.QuejasRedeco.QuejasMedio, new SelectList(Model.MediosRecepcion, "Id", "Descripcion"), string.Format("{0}", rs.GetString("SeleccionDeOpcion")), new { @class = "select-form selectitems", @id = "QuejasMedio", @data_live_search = "true", @data_live_search_normalize = "true" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            @Html.Label("", string.Format("{0}", rs.GetString("NivelAtención")), new { @class = "label-control mb-2" })
+                            <div class="col nopadding">
+                                <div class="input-group">
+                                    @* @Html.EditorFor(model => model.QuejasRedeco.QuejasNivelAT, new { htmlAttributes = new { @class = "form-control", @id = "QuejasNivelAT", @autocomplete = "off" } }) *@
+                                    @Html.DropDownListFor(model => model.QuejasRedeco.QuejasNivelAT, new SelectList(Model.NivelesAtencion, "Id", "Descripcion"), string.Format("{0}", rs.GetString("SeleccionDeOpcion")), new { @class = "select-form selectitems", @id = "QuejasNivelAT", @data_live_search = "true", @data_live_search_normalize = "true" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            @Html.Label("", string.Format("{0}", rs.GetString("ProductoServicio")), new { @class = "label-control mb-2" })
+                            <div class="col nopadding">
+                                <div class="input-group">
+                                    @* @Html.EditorFor(model => model.QuejasRedeco.QuejasProducto, new { htmlAttributes = new { @class = "form-control", @id = "QuejasProducto", @autocomplete = "off" } }) *@
+                                    @Html.DropDownListFor(model => model.QuejasRedeco.QuejasProducto, new SelectList(Model.Productos, "Id", "Descripcion"), string.Format("{0}", rs.GetString("SeleccionDeOpcion")), new { @class = "select-form selectitems", @id = "QuejasProducto", @data_live_search = "true", @data_live_search_normalize = "true" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex-row row my-3">
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label class="mb-2" for="password">@rs.GetString("QuejaCausa")</label>
+                            <div class="col nopadding">
+                                @* @Html.EditorFor(model => model.QuejasRedeco.QuejasCausa, new { htmlAttributes = new { @class = "form-control", @id = "QuejasCausa", @autocomplete = "off" } }) *@
+                                @Html.DropDownListFor(model => model.QuejasRedeco.QuejasCausa, new SelectList(Model.CausasProductos, "Id", "Descripcion"), string.Format("{0}", rs.GetString("SeleccionDeOpcion")), new { @class = "select-form selectitems", @id = "QuejasCausa", @data_live_search = "true", @data_live_search_normalize = "true" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="flex-row row">
+                            <label class="mb-2" for="">@rs.GetString("PORI")</label>
+                            <div class="col-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="QuejasPORI" id="QuejasPORI1" value="SI">
+                                    <label class="form-check-label" for="QuejasPORI1">
+                                        @rs.GetString("Si")
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="QuejasPORI" id="QuejasPORI2" value="NO" checked>
+                                    <label class="form-check-label" for="QuejasPORI2">
+                                        @rs.GetString("No")
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="flex-row row">
+                            <label class="mb-2" for="">@rs.GetString("QuejaEstatus")</label>
+                            <div class="col-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="QuejasEstatus" id="QuejasEstatus1" value="1">
+                                    <label class="form-check-label" for="QuejasEstatus1">
+                                        @rs.GetString("Pendiente")
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="QuejasEstatus" id="QuejasEstatus2" value="2" checked>
+                                    <label class="form-check-label" for="QuejasEstatus2">
+                                        @rs.GetString("Concluido")
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex-row row my-3">
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label class="mb-2" for="password">@rs.GetString("EntidadFederativa")</label>
+                            <div class="col nopadding">
+                                @* @Html.EditorFor(model => model.QuejasRedeco.QuejasEstados, new { htmlAttributes = new { @class = "form-control", @id = "QuejasEstados", @autocomplete = "off" } }) *@
+                                @Html.DropDownListFor(model => model.QuejasRedeco.QuejasEstados, new SelectList(Model.Estados, "Id", "Descripcion"), string.Format("{0}", rs.GetString("SeleccionDeOpcion")), new { @class = "select-form selectitems", @id = "QuejasEstados", @data_live_search = "true", @data_live_search_normalize = "true" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            @Html.Label("", string.Format("{0}", rs.GetString("Municipio")), new { @class = "label-control mb-2" })
+                            <div class="col nopadding">
+                                <div class="input-group">
+                                    @* @Html.EditorFor(model => model.QuejasRedeco.QuejasMunId, new { htmlAttributes = new { @class = "form-control", @id = "QuejasMunId", @autocomplete = "off" } }) *@
+                                    @Html.DropDownListFor(model => model.QuejasRedeco.QuejasMunId, new SelectList(Model.Municipios, "Id", "Descripcion"), string.Format("{0}", rs.GetString("SeleccionDeOpcion")), new { @class = "select-form selectitems", @id = "QuejasMunId", @data_live_search = "true", @data_live_search_normalize = "true" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            @Html.Label("", string.Format("{0}", rs.GetString("CP")), new { @class = "label-control mb-2" })
+                            <div class="col nopadding">
+                                <div class="input-group">
+                                    @* @Html.EditorFor(model => model.QuejasRedeco.QuejasCP, new { htmlAttributes = new { @class = "form-control", @id = "QuejasCP", @autocomplete = "off" } }) *@
+                                    @Html.DropDownListFor(model => model.QuejasRedeco.QuejasCP, new SelectList(Model.CodigosPostales, "Id", "Descripcion"), string.Format("{0}", rs.GetString("SeleccionDeOpcion")), new { @class = "select-form selectitems", @id = "QuejasCP", @data_live_search = "true", @data_live_search_normalize = "true" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex-row row my-3">
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label class="mb-2" for="password">@rs.GetString("Colonia")</label>
+                            <div class="col nopadding">
+                                @* @Html.EditorFor(model => model.QuejasRedeco.QuejasColId, new { htmlAttributes = new { @class = "form-control", @id = "QuejasColId", @autocomplete = "off" } }) *@
+                                @* @Html.DropDownListFor(model => model.QuejasRedeco.QuejasColId, new SelectList(Model.Colonias, "Id", "Descripcion"), string.Format("{0}", rs.GetString("SeleccionDeOpcion")), new { @class = "select-form selectitems", @id = "QuejasColId", @data_live_search = "true", @data_live_search_normalize = "true" }) *@
+                                @Html.DropDownListFor(
+                                         model => model.QuejasRedeco.QuejasColId,
+                                         new SelectList(Model.Colonias, "Id", "Descripcion"),
+                                         string.Format("{0}", rs.GetString("SeleccionDeOpcion")),
+                                         new { @class = "select-form selectitems", @id = "QuejasColId", @data_live_search = "true", @data_live_search_normalize = "true" }
+                                         )
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="flex-row row">
+                            <label class="mb-2" for="">@rs.GetString("TipoPersona")</label>
+                            <div class="col-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="QuejasTipoPersona" id="QuejasTipoPersona1" value="1" checked>
+                                    <label class="form-check-label" for="QuejasTipoPersona1">
+                                        @rs.GetString("Fisica")
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="QuejasTipoPersona" id="QuejasTipoPersona2" value="2">
+                                    <label class="form-check-label" for="QuejasTipoPersona2">
+                                        @rs.GetString("Moral")
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex-row row my-3">
+                    <div class="col-4">
+                        <div class="flex-row row">
+                            <label class="mb-2" for="">@rs.GetString("Sexo")</label>
+                            <div class="col-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="QuejasSexo" id="QuejasSexo1" value="H" checked>
+                                    <label class="form-check-label" for="QuejasSexo1">
+                                        @rs.GetString("Hombre")
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="QuejasSexo" id="QuejasSexo2" value="M">
+                                    <label class="form-check-label" for="QuejasSexo2">
+                                        @rs.GetString("Mujer")
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            @Html.Label("", string.Format("{0}", rs.GetString("Edad")), new { @class = "label-control mb-2" })
+                            <div class="col nopadding">
+                                <div class="input-group">
+                                    @Html.EditorFor(model => model.QuejasRedeco.QuejasEdad, new { htmlAttributes = new { @type = "number", @value = "18", @min = "18", @max = "100", @class = "form-control", @id = "QuejasEdad", @autocomplete = "off" } })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            @Html.Label("", string.Format("{0}", rs.GetString("QuejaFechaResolucion")), new { @class = "label-control mb-2" })
+                            <div class="col nopadding">
+                                <div class="input-group">
+                                    @Html.EditorFor(model => model.QuejasRedeco.QuejasFecResolucion, new { htmlAttributes = new { @type = "date", @class = "form-control", @id = "QuejasFecResolucion", @autocomplete = "off" } })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            @Html.Label("", string.Format("{0}", rs.GetString("QuejaFechaNotificacion")), new { @class = "label-control mb-2" })
+                            <div class="col nopadding">
+                                <div class="input-group">
+                                    @Html.EditorFor(model => model.QuejasRedeco.QuejasFecNotificacion, new { htmlAttributes = new { @type = "date", @class = "form-control", @id = "QuejasFecNotificacion", @autocomplete = "off" } })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex-row row my-3">
+                    <div class="col-4">
+                        <div class="form-group">
+                            @Html.Label("", string.Format("{0}", rs.GetString("QuejaRespuesta")), new { @class = "label-control mb-2" })
+                            <div class="col nopadding">
+                                <div class="input-group">
+                                    @* @Html.EditorFor(model => model.QuejasRedeco.QuejasRespuesta, new { htmlAttributes = new { @class = "form-control", @id = "QuejasRespuesta", @autocomplete = "off" } }) *@
+                                    @Html.DropDownListFor(model => model.QuejasRedeco.QuejasRespuesta, new SelectList(Model.Respuestas, "Id", "Descripcion"), string.Format("{0}", rs.GetString("SeleccionDeOpcion")), new { @class = "select-form selectitems", @id = "QuejasRespuesta", @data_live_search = "true", @data_live_search_normalize = "true" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            @Html.Label("", string.Format("{0}", rs.GetString("QuejaNumPenal")), new { @class = "label-control mb-2" })
+                            <div class="col nopadding">
+                                <div class="input-group">
+                                    @Html.EditorFor(model => model.QuejasRedeco.QuejasNumPenal, new { htmlAttributes = new { @type = "number", @min = "0", @max = "9999", @class = "form-control", @id = "QuejasNumPenal", @autocomplete = "off" } })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label class="mb-2" for="password">@rs.GetString("Penalizacion")</label>
+                            <div class="col nopadding">
+                                @* @Html.EditorFor(model => model.QuejasRedeco.QuejasPenalizacion, new { htmlAttributes = new { @class = "form-control", @id = "QuejasPenalizacion", @autocomplete = "off" } }) *@
+                                @Html.DropDownListFor(model => model.QuejasRedeco.QuejasPenalizacion, new SelectList(Model.Penalizaciones, "Id", "Descripcion"), string.Format("{0}", rs.GetString("SeleccionDeOpcion")), new { @class = "select-form selectitems", @id = "QuejasPenalizacion", @data_live_search = "true", @data_live_search_normalize = "true" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="container">
+                    <button id="nuevoUsuarioModal_close" type="button" class="btn btn-danger btn-block-modal" data-bs-dismiss="modal">@rs.GetString("Cerrar")</button>
+                    <button type="button" class="btn btn-primary btn-block-modal" id="btn_agregarQueja">@rs.GetString("AgregarQuejaBtn")</button>
+                    <button type="button" class="btn btn-info btn-block-modal" id="btn_actualizarQueja" style="display:none;">@rs.GetString("ActualizarQueja")</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalListadoErrores" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">@rs.GetString("TQuejasErrores")</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body px-4">
+                <div class="flex-row row mt-3">
+                    <div class="col">
+                        <div class="" id="Scroll">
+                            <table class="table table-sm table-responsive w-100 d-block d-xl-table table-bordered table-striped selector dt-body-center pt-3" id="tablaListadoErrores" style="width:100%">
+                                <thead class="dark-thead">
+                                    <tr>
+                                        <th></th>
+                                        <th></th>
+                                        <th class="">@rs.GetString("QuejaFolio")</th>
+                                        <th class="">@rs.GetString("TQuejaFechaRecepcion")</th>
+                                        <th class="">@rs.GetString("TMedioRecepcion")</th>
+                                        <th class="">@rs.GetString("TNivelAtencion")</th>
+                                        <th class="">@rs.GetString("ProductoServicio")</th>
+                                        <th class="">@rs.GetString("QuejaCausa")</th>
+                                        <th class="">@rs.GetString("QuejaEstatus")</th>
+                                        <th class="">@rs.GetString("TipoPersona")</th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="container">
+                    <button id="modalListadoErrores_close" type="button" class="btn btn-danger btn-block-modal" data-bs-dismiss="modal">@rs.GetString("Cerrar")</button>
+                    <button type="button" class="btn btn-primary btn-block-modal" id="btn_corregirQuejas">@rs.GetString("CorregirQuejas")</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalErroresQueja" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">@rs.GetString("TErroresQueja")</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body px-4">
+                <div class="flex-row row my-2">
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label class="mb-2" for="password">@rs.GetString("PeriodoQueja")</label>
+                            <div class="input-group mb-3">
+                                <div class="col nopadding">
+                                    @Html.DropDownListFor(model => model.QuejasRedeco.QuejasNoMes, new SelectList(Model.Meses, "Id", "Descripcion"), string.Format("{0}", rs.GetString("SeleccionDeOpcion")), new { @class = "select-form selectitems", @id = "QuejasNoTrim_Ver", @data_live_search = "true", @data_live_search_normalize = "true", @disabled = "disabled" })
+                                </div>
+                                <span class="input-group-text" id="anioActual_Ver"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            @Html.Label("", string.Format("{0}", rs.GetString("QuejaFolio")), new { @class = "label-control mb-2" })
+                            <div class="col nopadding">
+                                <div class="input-group">
+                                    @Html.EditorFor(model => model.QuejasRedeco.QuejasFolio, new { htmlAttributes = new { @class = "form-control", @id = "QuejasFolio_Ver", @autocomplete = "off", @disabled = "disabled" } })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            @Html.Label("", string.Format("{0}", rs.GetString("QuejaFechaRecepcion")), new { @class = "label-control mb-2" })
+                            <div class="col nopadding">
+                                <div class="input-group">
+                                    @Html.EditorFor(model => model.QuejasRedeco.QuejasFecRecepcion, new { htmlAttributes = new { @type = "date", @class = "form-control", @id = "QuejasFecRecepcion_Ver", @autocomplete = "off", @disabled = "disabled" } })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex-row row mt-3">
+                    <div class="col">
+                        <div class="" id="Scroll">
+                            <table class="table table-sm table-responsive w-100 d-block d-xl-table table-bordered table-striped selector dt-body-center pt-3" id="tablaErroresQueja" style="width:100%">
+                                <thead class="dark-thead">
+                                    <tr>
+                                        <th class="">@rs.GetString("Descripcion")</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="container">
+                    <button id="" type="button" class="btn btn-danger btn-block-modal" data-bs-dismiss="modal">@rs.GetString("Cerrar")</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+
+        var urlEnviarQueja = '@Url.Action("Redeco_Enviar_Queja", "Redeco", new { Area = "" })';
+        var urlConsultarCausas = '@Url.Action("Redeco_Consultar_Causas_Producto", "Redeco", new { Area = "" })';
+        var urlConsultarCP = '@Url.Action("Redeco_Consultar_CP", "Redeco", new { Area = "" })';
+        var urlConsultarMunicipios = '@Url.Action("Redeco_Consultar_Municipios", "Redeco", new { Area = "" })';
+        var urlConsultarColonias = '@Url.Action("Redeco_Consultar_Colonias", "Redeco", new { Area = "" })';
+
+        var textoScript = {
+            primero: `@Html.Raw(rs.GetString("TPrimero"))`,
+            anterior: `@Html.Raw(rs.GetString("TAnterior"))`,
+            siguiente: `@Html.Raw(rs.GetString("TSiguiente"))`,
+            ultimo: `@Html.Raw(rs.GetString("TUltimo"))`,
+            inicio: `@Html.Raw(rs.GetString("TInicio"))`,
+            mostrar: `@Html.Raw(rs.GetString("Mostrar"))`,
+            buscar: `@Html.Raw(rs.GetString("Buscar"))`,
+            buscando: `@Html.Raw(rs.GetString("Buscando"))`,
+            cargandoRegistros: `@Html.Raw(rs.GetString("CargandoRegistros"))`,
+            sinDatos: `@Html.Raw(rs.GetString("TSinDatos"))`,
+            noseencontraron: `@Html.Raw(rs.GetString("NoSeEncontraron"))`,
+
+            si: `@Html.Raw(rs.GetString("Si"))`,
+            no: `@Html.Raw(rs.GetString("No"))`,
+            eliminar: `@Html.Raw(rs.GetString("Eliminar"))`,
+            modificar: `@Html.Raw(rs.GetString("Modificar"))`,
+            verificar: `@Html.Raw(rs.GetString("Verificar"))`,
+            aceptado: `@Html.Raw(rs.GetString("Aceptado"))`,
+            rechazado: `@Html.Raw(rs.GetString("Rechazado"))`,
+            pendiente: `@Html.Raw(rs.GetString("Pendiente"))`,
+            corregir: `@Html.Raw(rs.GetString("Corregir"))`,
+            verErrores: `@Html.Raw(rs.GetString("VerErrores"))`,
+
+            mExitoEnvioQuejas: `@Html.Raw(rs.GetString("MExitoEnvioQuejas"))`,
+            mErrorEnvioQuejas: `@Html.Raw(rs.GetString("MErrorEnvioQuejas"))`,
+            mErrorEnvioQuejas2: `@Html.Raw(rs.GetString("MErrorEnvioQuejas2"))`,
+            mErrorSubida: `@Html.Raw(rs.GetString("MErrorSubida"))`,
+            mErrorPeticion: `@Html.Raw(rs.GetString("MErrorPeticion"))`,
+           
+            error: `@Html.Raw(rs.GetString("Error"))`,
+            ErrorGenerico: `@Html.Raw(rs.GetString("ErrorGenerico"))`,
+            
+            errorLoginTitulo: `@Html.Raw(rs.GetString("MErrorLoginTitulo"))`,
+            errorLogin: `@Html.Raw(rs.GetString("MErrorLogin"))`,
+            mEliminarRegistro: `@Html.Raw(rs.GetString("MEliminarRegistro"))`,
+            mRegistroEliminado: `@Html.Raw(rs.GetString("MRegistroEliminado"))`,
+        }
+    </script>
+
+    <script type="module" src="~/js/constantes.js"></script>
+    <script type="module" src="~/js/Redeco/EnviarRedeco.js"></script>
+}

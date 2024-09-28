@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+    <PackageReference Include="EPPlus" Version="7.2.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Clases\Condusef\Redeco\" />
+    <Folder Include="Clases\Condusef\Reune\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="BD_DLL">
+      <HintPath>bin\Debug\net8.0\BD_DLL.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

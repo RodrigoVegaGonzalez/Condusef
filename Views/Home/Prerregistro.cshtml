@@ -1,0 +1,249 @@
+﻿@using System.Globalization;
+@model Condusef_DLL.Funciones.Condusef.Empresa;
+@{
+    ViewBag.Title = "Prerregistro";
+    ViewBag.TituloCard = "";
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+    //var cultura = new CultureInfo(Request.Cookies["lang"].Value?.ToString() ?? "es");
+    var cultura = new CultureInfo(@ViewData["Lang"].ToString() ?? "es");
+    var rm = new System.Resources.ResourceManager(typeof(IdiomaCondusef_DLL.Registro.Registro));
+    var rs = rm.GetResourceSet(cultura, true, true);
+}
+
+<div class="container-fluid my-3 px-5">
+    <div class="card my-3">
+        <div class="card-header center-content">
+            <h5 class="header">@rs.GetString("TituloPrerregistro")</h5>
+        </div>
+        <div class="card-body p-4">
+            <div class="flex-row row">
+                <div class="col-8">
+                    @Html.Label("", string.Format("{0}", rs.GetString("RazonSocial")), htmlAttributes: new { @class = "control-label mb-2" })
+                    <div class="col nopadding">
+                        <div class="input-group">
+                            @Html.Editor("RazonSocial", new { htmlAttributes = new { @class = "form-control", @autocomplete = "off" } })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    @Html.Label("", string.Format("{0}", rs.GetString("NombreCorto")), htmlAttributes: new { @class = "control-label mb-2" })
+                    <div class="col nopadding">
+                        <div class="input-group">
+                            @Html.Editor("NombreCorto", new { htmlAttributes = new { @class = "form-control", @autocomplete = "off" } })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex-row row mt-3">
+                <div class="col-8">
+                    @Html.Label("", string.Format("{0}", rs.GetString("Sector")), htmlAttributes: new { @class = "control-label mb-2" })
+                    <div class="col nopadding">
+                        <div class="input-group">
+                            @Html.DropDownList("Sector", new SelectList(Model.Sectores, "Id", "Descripcion"), string.Format("{0}", rs.GetString("SeleccionDeOpcion")), new { @class = "select-form selectitems ", @data_live_search = "true", @data_live_search_normalize = "true" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    @Html.Label("", string.Format("{0}", rs.GetString("RFC")), htmlAttributes: new { @class = "control-label mb-2" })
+                    <div class="col nopadding">
+                        <div class="input-group">
+                            @Html.Editor("RFC", new { htmlAttributes = new { @class = "form-control", @autocomplete = "off", @style = "text-transform: uppercase;" } })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex-row row mt-3">
+                <div class="col-5">
+                    @Html.Label("", string.Format("{0}", rs.GetString("NombreContacto")), htmlAttributes: new { @class = "control-label mb-2" })
+                    <div class="col nopadding">
+                        <div class="input-group">
+                            @Html.Editor("NombreContacto", new { htmlAttributes = new { @class = "form-control", @autocomplete = "off" } })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    @Html.Label("", string.Format("{0}", rs.GetString("Email")), htmlAttributes: new { @class = "control-label mb-2" })
+                    <div class="col nopadding">
+                        <div class="input-group">
+                            @Html.Editor("Email", new { htmlAttributes = new { @class = "form-control", @autocomplete = "off", @type = "email" } })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    @Html.Label("", string.Format("{0}", rs.GetString("Telefono") + " (máximo 10 caracteres)"), htmlAttributes: new { @class = "control-label mb-2" })
+                    <div class="col nopadding">
+                        <div class="input-group">
+                            @Html.Editor("Telefono", new { htmlAttributes = new { @class = "form-control", @autocomplete = "off", @type = "tel", @maxlength = "10" } })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex-row row mt-3">
+                <div class="col-4">
+                    @Html.Label("", string.Format("{0}", rs.GetString("Calle")), htmlAttributes: new { @class = "control-label mb-2" })
+                    <div class="col nopadding">
+                        <div class="input-group">
+                            @Html.Editor("Calle", new { htmlAttributes = new { @class = "form-control", @autocomplete = "off" } })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-2">
+                    @Html.Label("", string.Format("{0}", rs.GetString("NumExt")), htmlAttributes: new { @class = "control-label mb-2" })
+                    <div class="col nopadding">
+                        <div class="input-group">
+                            @Html.Editor("NumExt", new { htmlAttributes = new { @class = "form-control", @autocomplete = "off" } })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-2">
+                    @Html.Label("", string.Format("{0}", rs.GetString("NumInt")), htmlAttributes: new { @class = "control-label mb-2" })
+                    <div class="col nopadding">
+                        <div class="input-group">
+                            @Html.Editor("NumInt", new { htmlAttributes = new { @class = "form-control", @autocomplete = "off" } })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    @Html.Label("", string.Format("{0}", rs.GetString("Colonia")), htmlAttributes: new { @class = "control-label mb-2" })
+                    <div class="col nopadding">
+                        <div class="input-group">
+                            @Html.Editor("Colonia", new { htmlAttributes = new { @class = "form-control", @autocomplete = "off", @type = "email" } })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex-row row mt-3">
+                <div class="col-2">
+                    @Html.Label("", string.Format("{0}", rs.GetString("CP")), htmlAttributes: new { @class = "control-label mb-2" })
+                    <div class="col nopadding">
+                        <div class="input-group">
+                            @Html.Editor("CP", new { htmlAttributes = new { @class = "form-control", @autocomplete = "off" } })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    @Html.Label("", string.Format("{0}", rs.GetString("Municipio")), htmlAttributes: new { @class = "control-label mb-2" })
+                    <div class="col nopadding">
+                        <div class="input-group">
+                            @Html.Editor("Municipio", new { htmlAttributes = new { @class = "form-control", @autocomplete = "off" } })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    @Html.Label("", string.Format("{0}", rs.GetString("Ciudad")), htmlAttributes: new { @class = "control-label mb-2" })
+                    <div class="col nopadding">
+                        <div class="input-group">
+                            @Html.Editor("Ciudad", new { htmlAttributes = new { @class = "form-control", @autocomplete = "off" } })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    @Html.Label("", string.Format("{0}", rs.GetString("Estado")), htmlAttributes: new { @class = "control-label mb-2" })
+                    <div class="col nopadding">
+                        <div class="input-group">
+                            @Html.DropDownList("Estado", new SelectList(Model.estados, "Id", "Descripcion"), string.Format("{0}", rs.GetString("SeleccionDeOpcion")), new { @class = "select-form selectitems ", @data_live_search = "true", @data_live_search_normalize = "true" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @* <div class="flex-row row mt-3">
+                <div class="col-8">
+                    <div class="form-group">
+                        @Html.Label("", string.Format("{0}", rs.GetString("Localidad")), htmlAttributes: new { @class = "control-label" })
+                        <div class="col nopadding">
+                            @Html.DropDownList("Localidad", new SelectList(Model.localidades, "Id", "Descripcion"), string.Format("{0}", rs.GetString("SeleccionDeOpcion")), new { @class = "select-form selectitems", @data_live_search = "true", @data_live_search_normalize = "true" })
+                        </div>
+                    </div>
+                </div>
+            </div> *@
+        </div>
+        <div class="card-footer">
+            <div class="container">
+                <a asp-area="" asp-controller="Home" asp-action="Login" class="btn btn-danger w-100 btn-block mx-2">
+                    Regresar al login
+                </a>
+                <button id="btn_enviarPrerregistro" class="btn btn-login w-100 btn-block mx-2">@rs.GetString("Btn_EnviarPrerregistro")</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalErrores" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Su registro tiene los siguientes errores:</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body px-4">
+                <div class="flex-row row mt-3">
+                    <div class="col">
+                        <div class="" id="Scroll">
+                            <table class="table table-sm table-responsive w-100 d-block d-xl-table table-bordered table-striped selector dt-body-center pt-3" id="tablaErrores" style="width:100%">
+                                <thead class="dark-thead">
+                                    <tr>
+                                        <th class="">Descripcion</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="container">
+                    <button id="" type="button" class="btn btn-danger btn-block-modal" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script type="text/javascript">
+
+        var urlEnviarPrerregistro = '@Url.Action("Enviar_Prerregistro", "Home", new { Area = "" })';
+        var urlDescargarProductos = '@Url.Action("Descargar_Productos", "Condusef", new { Area = "" })';
+        var urlSolicitarCambio = '@Url.Action("Password_Solicitar_Cambio", "Home", new { area = "" })';
+        var urlConsultaTablaUsuario = '@Url.Action("Consultar_Usuarios", "Condusef", new { area = "" })';
+        var urlGuardarUsuario = '@Url.Action("Guardar_Usuario", "Condusef", new { area = "" })';
+        var urlEliminarUsuario = '@Url.Action("Eliminar_Usuario", "Condusef", new { area = "" })';
+        var textoScript = {
+            primero: `@Html.Raw(rs.GetString("TPrimero"))`,
+            anterior: `@Html.Raw(rs.GetString("TAnterior"))`,
+            siguiente: `@Html.Raw(rs.GetString("TSiguiente"))`,
+            ultimo: `@Html.Raw(rs.GetString("TUltimo"))`,
+            inicio: `@Html.Raw(rs.GetString("TInicio"))`,
+            mostrar: `@Html.Raw(rs.GetString("Mostrar"))`,
+            buscar: `@Html.Raw(rs.GetString("Buscar"))`,
+            buscando: `@Html.Raw(rs.GetString("Buscando"))`,
+            cargandoRegistros: `@Html.Raw(rs.GetString("CargandoRegistros"))`,
+            sinDatos: `@Html.Raw(rs.GetString("TSinDatos"))`,
+            noseencontraron: `@Html.Raw(rs.GetString("NoSeEncontraron"))`,
+
+            si: `@Html.Raw(rs.GetString("Si"))`,
+            no: `@Html.Raw(rs.GetString("No"))`,
+            eliminar: `@Html.Raw(rs.GetString("Eliminar"))`,
+            desactivar: `@Html.Raw(rs.GetString("Desactivar"))`,
+            activo: `@Html.Raw(rs.GetString("Activo"))`,
+            bloqueado: `@Html.Raw(rs.GetString("Bloqueado"))`,
+            eliminarUsuario: `@Html.Raw(rs.GetString("PreguntaEliminarUsuario"))`,
+            noRevertir: `@Html.Raw(rs.GetString("NoRevertir"))`,
+            usuarioEliminado: `@Html.Raw(rs.GetString("MUsuarioEliminado"))`,
+            errorEliminarUsuario: `@Html.Raw(rs.GetString("ErrorEliminarUsuario"))`,
+            cambiarContrasena: `@Html.Raw(rs.GetString("CambiarContrasena"))`,
+            mExitoRegistro: `@Html.Raw(rs.GetString("MExitoRegistro"))`,
+            mErrorRegistro: `@Html.Raw(rs.GetString("MErrorRegistro"))`,
+            mErrorTitulo: `@Html.Raw(rs.GetString("MErrorTitulo"))`,
+            mExitoTitulo: `@Html.Raw(rs.GetString("MExitoTitulo"))`,
+
+            errorLoginTitulo: `@Html.Raw(rs.GetString("MErrorLoginTitulo"))`,
+            errorLogin: `@Html.Raw(rs.GetString("MErrorLogin"))`,
+        }
+    </script>
+
+    <script defer src="~/js/Generales/fntGenericas.js"></script>
+    <script defer src="~/js/Home/prerregistro.js"></script>
+    @*@Scripts.RenderFormat("<script src='{0}' defer></script>", "~/scripts/home_login")*@
+}

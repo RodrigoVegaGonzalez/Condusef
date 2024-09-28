@@ -1,0 +1,102 @@
+﻿@using System.Globalization;
+
+@{
+    var cultura = new CultureInfo("es");
+    var rm = new System.Resources.ResourceManager(typeof(IdiomaCondusef_DLL.Admin.Admin));
+    var rs = rm.GetResourceSet(cultura, true, true);
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Condusef</title>
+    <link rel="icon" href="~/favicon.png" type="image/x-icon" />
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/dataTable/datatables.min.css" />
+    <link rel="stylesheet" href="~/css/Shared/layout.css">
+    <link rel="stylesheet" href="~/css/Shared/layoutApp.css" />
+    <link rel="stylesheet" href="~/css/Condusef/condusef.css" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/Shared/layoutAdmin.css" />
+</head>
+<body>
+    <div id="loading-panel" class="loading-panel" style="display: none">
+        <div class="panel-container">
+            <span class="loader"></span>
+        </div>
+    </div>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Admin" asp-action="Index">Inicio</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="AdministracionEmpresas">Administración de empresas</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="BitacoraAPI">Bitacora API</a>
+                        </li>
+                    </ul>
+                    <div class="collapse navbar-collapse " id="navbarNavDarkDropdown">
+                        <div class="right-btn__container ms-auto">
+                            <ul class="navbar-nav">
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle dropdown-btn" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fa-solid fa-circle-half-stroke icon"></i>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu">
+                                        <li><a class="dropdown-item" onclick="cambiarIdioma('es')">Claro</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item" onclick="cambiarIdioma('en')">Oscuro</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            <ul class="navbar-nav">
+                                <li class="nav-item dropdown">
+                                    <a id="config-btn" class="nav-link dropdown-toggle dropdown-btn" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i id="config-icon" class="fa-solid fa-gear icon"></i>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu">
+                                        <li><a class="dropdown-item" onclick="">Perfil</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item" onclick="" id="logout-btn"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Cerrar sesión</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+    
+    <div class="main-container">
+        <main role="main" class="">
+            @RenderBody()
+        </main>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery-3.7.1.min.js"></script>
+    <script src="~/lib/dataTable/datatables.min.js"></script>
+    <script src="~/lib/font-awesome_6.4.2/js/all.min.js"></script>
+    <script src="~/lib/sweetalert2/sweetalert2.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/Shared/layout.js"></script>
+    <script src="~/js/Generales/fntGenericas.js"></script>
+    <script src="~/js/Shared/layoutAdmin.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
+
+<script type="text/javascript">
+    var urlLogout = '@Url.Action("Logout","Admin", new { Area="" })';
+
+</script>

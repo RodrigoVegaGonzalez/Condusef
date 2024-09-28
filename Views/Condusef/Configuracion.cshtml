@@ -1,0 +1,654 @@
+﻿@using System.Globalization;
+;
+@model Condusef_DLL.Funciones.Condusef.Empresa;
+@{
+    var cultura = new CultureInfo(@ViewData["Lang"].ToString() ?? "es");
+    var rm = new System.Resources.ResourceManager(typeof(IdiomaCondusef_DLL.Configuracion.Configuracion));
+    var rs = rm.GetResourceSet(cultura, true, true);
+    ViewBag.Title = rs.GetString("Title");
+    ViewBag.TituloCard = rs.GetString("TituloCard");
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+}
+<style>
+    .section-card{
+        margin: 1em 0;
+    }
+
+    .collapse-space{
+        padding: 1em 4em;
+    }
+
+    .font-info{
+        font-size: 1rem;
+    }
+
+    .title{
+        font-weight: 700;
+    }
+
+    .select2-container {
+        z-index: 99999;
+        min-width: 100%;
+        max-width: 100%;
+    }
+</style>
+
+<div class="container-fluid p-0" >
+    <div id="" class="py-3 px-5">
+        <div class="flex-row row">
+            <div class="col-5 ">
+                <div class="profile-img p-3">
+                    <img src="~/Logo.jpg" style="width: 100%" ; height="100%"; />
+                </div>
+                
+            </div>
+            <div class="col-7 px-3">
+                <h2>@Model.DatosGeneralesPorEmpresa.Nombre</h2>
+                <hr />
+                <div class="flex-row row">
+                    <div class="col-4">
+                        <label class="font-info">@rs.GetString("Contacto"):</label>
+                    </div>
+                    <div class="col-7">
+                        <p class="font-info">@Model.DatosGeneralesPorEmpresa.PersonaContacto</p>
+                    </div>
+                </div>
+                <div class="flex-row row">
+                    <div class="col-4">
+                        <label class ="font-info">@rs.GetString("CorreoContacto"):</label>
+                    </div>
+                    <div class="col-7">
+                        <p class="font-info" style="color:#2c5bf4;">@Model.DatosGeneralesPorEmpresa.CorreoContacto</p>
+                    </div>
+                </div>
+                <div class="flex-row row">
+                    <div class="col-4">
+                        <label class="font-info">@rs.GetString("TelefonoContacto"):</label>
+                    </div>
+                    <div class="col-7">
+                        <p class="font-info">@Model.DatosGeneralesPorEmpresa.TelefonoContacto</p>
+                    </div>
+                </div>
+                <div class="flex-row row">
+                    <div class="col-4">
+                        <label class="font-info">@rs.GetString("Plan"):</label>
+                    </div>
+                    <div class="col-7">
+                        <p class="font-info">@Model.DatosGeneralesPorEmpresa.Plan</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="general-section" class="card section-card modal-selectitems">
+        <div id="token-collapse" class="card-header" data-bs-toggle="collapse" data-bs-target="#collapseDatosGenerales" aria-expanded="false" aria-controls="collapseDatosGenerales" onclick="changeArrow(this)">
+            <div class="flex-row row">
+                <div class="col-11 d-flex align-items-center">
+                    <h6 class="card-title title">@rs.GetString("TituloDatosGenerales")</h6>
+                </div>
+                <div class="col-1 center">
+                    <i class="fa-solid fa-arrow-up" style="display:none;"></i>
+                    <i class="fa-solid fa-arrow-down"></i>
+                </div>
+            </div>
+        </div>
+        <div class="collapse" id="collapseDatosGenerales">
+            <div class="card-body">
+                @using (Html.BeginForm("", "", FormMethod.Post, new { @id = "formularioDatosGenerales" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(m => m.DatosGeneralesPorEmpresa.RFC)
+                    <div class="flex-row row my-3">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                @Html.Label("", string.Format("{0}", rs.GetString("LabelNombreEmpresa")), new { @class = "label-control" })
+                                <div class="col nopadding">
+                                    <div class="input-group">
+                                        @Html.EditorFor(model => model.DatosGeneralesPorEmpresa.Nombre, new { htmlAttributes = new { @class = "form-control", @id = "Nombre", @autocomplete = "off" } })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Html.Label("", string.Format("{0}", rs.GetString("LabelNombreCorto")), new { @class = "label-control" })
+                                <div class="col nopadding">
+                                    <div class="input-group">
+                                        @Html.EditorFor(model => model.DatosGeneralesPorEmpresa.NomCorto, new { htmlAttributes = new { @class = "form-control", @id = "NomCorto", @autocomplete = "off", @disabled = "disabled" } })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex-row row">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                @Html.Label("", string.Format("{0}", rs.GetString("LabelSector")), new { @class = "label-control" })
+                                <div class="col nopadding">
+                                    <div class="input-group">
+                                        @Html.EditorFor(model => model.DatosGeneralesPorEmpresa.Sector, new { htmlAttributes = new { @class = "form-control", @id = "Sector", @autocomplete = "off", @disabled = "disabled" } })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Html.Label("", string.Format("{0}", rs.GetString("LabelRfcEmpresa")), new { @class = "label-control" })
+                                <div class="col nopadding">
+                                    <div class="input-group">
+                                        @Html.EditorFor(model => model.DatosGeneralesPorEmpresa.RFC, new { htmlAttributes = new { @class = "form-control", @id = "RFC", @autocomplete = "off", @disabled = "disabled" } })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex-row row my-3">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Html.Label("", string.Format("{0}", rs.GetString("LabelContacto")), new { @class = "label-control" })
+                                <div class="col nopadding">
+                                    <div class="input-group">
+                                        @Html.EditorFor(model => model.DatosGeneralesPorEmpresa.PersonaContacto, new { htmlAttributes = new { @class = "form-control", @id = "PersonaContacto", @autocomplete = "off" } })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Html.Label("", string.Format("{0}", rs.GetString("LabelCorreoContacto")), new { @class = "label-control" })
+                                <div class="col nopadding">
+                                    <div class="input-group">
+                                        @Html.EditorFor(model => model.DatosGeneralesPorEmpresa.CorreoContacto, new { htmlAttributes = new { @class = "form-control", @id = "CorreoContacto", @autocomplete = "off" } })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Html.Label("", string.Format("{0}", rs.GetString("LabelTelefonoContacto")), new { @class = "label-control" })
+                                <div class="col nopadding">
+                                    <div class="input-group">
+                                        @Html.EditorFor(model => model.DatosGeneralesPorEmpresa.TelefonoContacto, new { htmlAttributes = new { @class = "form-control", @id = "TelefonoContacto", @autocomplete = "off" } })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex-row row my-3">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                @Html.Label("", string.Format("{0}", rs.GetString("LabelDireccionCalle")), new { @class = "label-control" })
+                                <div class="col nopadding">
+                                    <div class="input-group">
+                                        @Html.EditorFor(model => model.DatosGeneralesPorEmpresa.DirCalle, new { htmlAttributes = new { @class = "form-control", @id = "DirCalle", @autocomplete = "off" } })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Html.Label("", string.Format("{0}", rs.GetString("LabelColonia")), new { @class = "label-control" })
+                                <div class="col nopadding">
+                                    <div class="input-group">
+                                        @Html.EditorFor(model => model.DatosGeneralesPorEmpresa.DirColonia, new { htmlAttributes = new { @class = "form-control", @id = "DirColonia", @autocomplete = "off" } })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex-row row my-3">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Html.Label("", string.Format("{0}", rs.GetString("LabelNumInterior")), new { @class = "label-control" })
+                                <div class="col nopadding">
+                                    <div class="input-group">
+                                        @Html.EditorFor(model => model.DatosGeneralesPorEmpresa.DirNumInt, new { htmlAttributes = new { @class = "form-control", @id = "DirNumInt", @autocomplete = "off" } })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Html.Label("", string.Format("{0}", rs.GetString("LabelNumExterior")), new { @class = "label-control" })
+                                <div class="col nopadding">
+                                    <div class="input-group">
+                                        @Html.EditorFor(model => model.DatosGeneralesPorEmpresa.DirNumExt, new { htmlAttributes = new { @class = "form-control", @id = "DirNumExt", @autocomplete = "off" } })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Html.Label("", string.Format("{0}", rs.GetString("LabelCodigoPostal")), new { @class = "label-control" })
+                                <div class="col nopadding">
+                                    <div class="input-group">
+                                        @Html.EditorFor(model => model.DatosGeneralesPorEmpresa.DirCP, new { htmlAttributes = new { @class = "form-control", @id = "DirCP", @autocomplete = "off" } })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex-row row my-3">
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                @Html.Label("", string.Format("{0}", rs.GetString("LabelMunicipio")), new { @class = "label-control" })
+                                <div class="col nopadding">
+                                    <div class="input-group">
+                                        @Html.EditorFor(model => model.DatosGeneralesPorEmpresa.DirMunicipio, new { htmlAttributes = new { @class = "form-control", @id = "DirMunicipio", @autocomplete = "off" } })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                @Html.Label("", string.Format("{0}", rs.GetString("LabelCiudad")), new { @class = "label-control" })
+                                <div class="col nopadding">
+                                    <div class="input-group">
+                                        @Html.EditorFor(model => model.DatosGeneralesPorEmpresa.DirCiudad, new { htmlAttributes = new { @class = "form-control", @id = "DirCiudad", @autocomplete = "off" } })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Html.Label("", string.Format("{0}", rs.GetString("LabelEstado")), new { @class = "label-control" })
+                                <div class="col nopadding">
+                                    <div class="input-group">
+                                        @* @Html.EditorFor(model => model.DatosGeneralesPorEmpresa.DirEstado, new { htmlAttributes = new { @class = "form-control", @id = "DirEstado", @autocomplete = "off" } }) *@
+                                        @Html.DropDownListFor(model => model.DatosGeneralesPorEmpresa.DirEstado, new SelectList(Model.estados, "Id", "Descripcion"), string.Format("{0}", rs.GetString("SeleccionDeOpcion")), new { @class = "select-form selectitems selectitems-search-input", @id = "DirEstado", @data_live_search = "true", @data_live_search_normalize = "true" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="card-footer">
+                <div class="row">
+                    <div class="cancelarModificar col-md-12">
+                        <div class="flex-row row">
+                            <div class="col-md-12">
+                                <button type="button" class="btn btn-primary btn-block" id="actualizarPerfil">@rs.GetString("BtnModificarPerfil")</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="token-section" class="card section-card">
+        <div id="token-collapse" class="card-header" data-bs-toggle="collapse" data-bs-target="#collapseToken" aria-expanded="false" aria-controls="collapseToken" onclick="changeArrow(this)">
+            <div class="flex-row row">
+                <div class="col-11 d-flex align-items-center">
+                    <h6 class="card-title title">@rs.GetString("TokenSection")</h6>
+                </div>
+                <div class="col-1 center">
+                    <i class="fa-solid fa-arrow-up" style="display:none;"></i>
+                    <i class="fa-solid fa-arrow-down"></i>
+                </div>
+            </div>
+        </div>
+        <div class="card-body collapse collapse-space" id="collapseToken">
+            <div class="flex-row row">
+                <div class="col-6">
+                    @Html.Label("", string.Format("{0}", rs.GetString("TokenRedeco")), htmlAttributes: new { @class = "control-label" })
+                    <div class="col nopadding">
+                        <div class="input-group">
+                            @Html.EditorFor(model => model.DatosGeneralesPorEmpresa.TokenRedeco, Model.DatosGeneralesPorEmpresa.TokenRedeco == ""
+                                     ? new { htmlAttributes = (object)new { @class = "form-control", @autocomplete = "off", @id = "TokenRedeco" } }
+                                     : new { htmlAttributes = (object)new { @class = "form-control", @autocomplete = "off", @id = "TokenRedeco", @disabled = "disabled" } })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    @Html.Label("", string.Format("{0}", rs.GetString("TokenReune")), htmlAttributes: new { @class = "control-label" })
+                    <div class="col nopadding">
+                        <div class="input-group">
+                            @Html.EditorFor(model => model.DatosGeneralesPorEmpresa.TokenReune, Model.DatosGeneralesPorEmpresa.TokenReune == ""
+                                     ? new { htmlAttributes = (object)new { @class = "form-control", @autocomplete = "off", @id = "TokenReune" } }
+                                     : new { htmlAttributes = (object)new { @class = "form-control", @autocomplete = "off", @id = "TokenReune", @disabled = "disabled" } })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @if(Model.DatosGeneralesPorEmpresa.TokenRedeco == "" || Model.DatosGeneralesPorEmpresa.TokenReune == "")
+            {
+                <div class="flex-row row my-3">
+                    <div class="col-12">
+                        <button type="button" id="actualizarToken-btn" class="btn btn-primary w-100 waves-effect waves-light">@rs.GetString("RegistrarToken")</button>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div id="user-section" class="card section-card">
+        <div id="token-collapse" class="card-header" data-bs-toggle="collapse" data-bs-target="#collapseUsers" aria-expanded="false" aria-controls="collapseDatosGenerales" onclick="changeArrow(this)">
+            <div class="flex-row row">
+                <div class="col-11 d-flex align-items-center">
+                    <h6 class="card-title title">@rs.GetString("TituloUsuarios")</h6>
+                </div>
+                <div class="col-1 center">
+                    <i class="fa-solid fa-arrow-up" style="display:none;"></i>
+                    <i class="fa-solid fa-arrow-down"></i>
+                </div>
+            </div>
+        </div>
+        <div class="collapse" id="collapseUsers">
+            <div class="card-body">
+                <div class="col">
+                    <div class="flex-row row">
+                        <div class="col">
+                            <table class="table table-sm table-responsive w-100 d-block d-xl-table table-bordered table-striped" id="tablaUsuarios" style="width:100%">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th hidden></th>
+                                        <th hidden></th>
+                                        <th>@rs.GetString("Usuario")</th>
+                                        <th>@rs.GetString("CorreoResponsable")</th>
+                                        <th>@rs.GetString("Perfil")</th>
+                                        <th>@rs.GetString("Estatus")</th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="row">
+                    <div class="cancelarModificar col-md-12">
+                        <div class="flex-row row">
+                            <div class="col-md-12 container">
+                                @if (Model.DatosGeneralesPorEmpresa.Servicios != 2)
+                                {
+                                    <button type="button" class="btn btn-info btn-block-modal" id="btn_GenerarSuperUser">Generar SuperUsuario Condusef</button>
+                                }
+                                <button type="button" class="btn btn-primary btn-block-modal" id="btn_Nuevousuario" data-bs-toggle="modal" data-bs-target="#nuevoUsuarioModal">@rs.GetString("BtnNuevoUsuario")</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>   
+    <div id="products-section" class="card section-card">
+        <div id="products-collapse" class="card-header" data-bs-toggle="collapse" data-bs-target="#collapseProductos" aria-expanded="false" aria-controls="collapseToken" onclick="changeArrow(this)">
+            <div class="flex-row row">
+                <div class="col-11 d-flex align-items-center">
+                    <h6 class="card-title title">@rs.GetString("ListadoProductos")</h6>
+                </div>
+                <div class="col-1 center">
+                    <i class="fa-solid fa-arrow-up" style="display:none;"></i>
+                    <i class="fa-solid fa-arrow-down"></i>
+                </div>
+            </div>
+        </div>
+        <div class="card-body collapse collapse-space" id="collapseProductos">
+            <div class="flex-row row my-3">
+                <div class="col-12">
+                    <button type="button" id="btn_descargarProductos" class="btn btn-info w-100 waves-effect waves-light">@rs.GetString("DescargarProductosRedeco")</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-4"></div>
+</div>
+
+<div class="modal fade modal-selectitems" id="nuevoUsuarioModal" tabindex="-1" aria-labelledby="nuevoUsuarioModal" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">@rs.GetString("NuevoUsuario")</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body px-5">
+                <div class="flex-row row px-1">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label class="mb-2" for="username">@rs.GetString("Usuario")</label>
+                            <div class="input-group mb-3">
+                                <input type="text" id="username" class="form-control" placeholder="Username" aria-label="Username" required>
+                                <span class="input-group-text"><i class="fa-solid fa-at"></i></span>
+                                @Html.EditorFor(model => model.DatosGeneralesPorEmpresa.NomCorto, new { htmlAttributes = new { @class = "form-control", @id = "NomCorto", @autocomplete = "off", @disabled = "disabled" } })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label class="mb-2" for="password">@rs.GetString("Perfil")</label>
+                            <div class="col nopadding">
+                                @Html.DropDownListFor(model => model.usuario.IdRol, new SelectList(Model.perfiles, "Id", "Descripcion"), string.Format("{0}", rs.GetString("SeleccionDeOpcion")), new { @class = "select-form selectitems", @id = "idRol", @data_live_search = "true", @data_live_search_normalize = "true", @required="required" })
+                            </div>
+                        </div>
+                    </div>
+                        <div class="flex-row row">
+                            <div class="col-12">
+                                
+                            </div>
+                        </div>
+                </div>
+                <div class="flex-row row px-1">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label class="mb-2" for="password">@rs.GetString("Password")</label>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-lock"></i></span>
+                                <input type="password" class="form-control" id="new-password" placeholder="Contraseña" aria-label="Contraseña" aria-describedby="basic-addon1" required>
+                                <span class="input-group-text" id="" onclick="cambiarIconoPassword(this,'new-password')">
+                                    <i class="fa-solid fa-eye icon-blue"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group" style="padding-top: 2rem;">
+                            <div class="input-group mb-3">
+                                <input type="checkbox" autocomplete="off" id="chk_ActivarUsuario" style="display:none;" onchange="toggleIconosCheckbox('chk_ActivarUsuario','icono_x_ActivarUsuario','icono_check_ActivarUsuario')" checked />
+                                <label class="btn btn-rounded-mid btn-primary input-group-text" id="" for="chk_ActivarUsuario">
+                                    <i class="fa-solid fa-xmark" id="icono_x_ActivarUsuario" style="display:none;"></i>
+                                    <i class="fa-solid fa-check" id="icono_check_ActivarUsuario"></i>
+                                </label>
+                                @Html.Label("", string.Format("{0}", rs.GetString("ActivarUsuario")), new { @class = "btn btn-rounded btn-light waves-effect waves-light input-group-text flex-grow-1 d-flex text-center", @for = "chk_ActivarUsuario" })
+                            </div>
+                        </div>                       
+                    </div>
+                </div>
+                <div class="flex-row row">
+                    <div class="col-12">
+                        <label class="mb-2" for="password">@rs.GetString("CorreoResponsable")</label>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-envelope"></i></span>
+                            <input type="email" id="correoResponsable" class="form-control" placeholder="Ingrese el correo de la persona responsable de este usuario" required />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="container">
+                    <button id="nuevoUsuarioModal_close" type="button" class="btn btn-danger btn-block-modal" data-bs-dismiss="modal">@rs.GetString("Cancelar")</button>
+                    <button type="button" class="btn btn-info btn-block-modal" onclick="guardarUsuario()">@rs.GetString("GuardarUsuario")</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="cambiarCorreoModal" tabindex="-1" aria-labelledby="cambiarCorreoModal" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Cambiar correo responsable</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body px-5">
+                <div class="flex-row row">
+                    <div class="col-5">
+                        <label class="mb-2" for="password">@rs.GetString("Usuario")</label>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-envelope"></i></span>
+                            <input type="text" id="idUsuario" class="form-control" disabled />
+                        </div>
+                    </div>
+                    <div class="col-7">
+                        <label class="mb-2" for="password">@rs.GetString("CorreoResponsable")</label>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-envelope"></i></span>
+                            <input type="email" id="correoResponsable2" class="form-control" placeholder="Ingrese el correo de la nueva persona responsable de este usuario" required />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="container">
+                    <button id="" type="button" class="btn btn-danger btn-block-modal" data-bs-dismiss="modal">@rs.GetString("Cancelar")</button>
+                    <button type="button" class="btn btn-info btn-block-modal" onclick="cambiarCorreoResponsable()">Cambiar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="cambiarPasswordModal" tabindex="-1" aria-labelledby="cambiarPasswordModal" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Cambiar contraseña usuario</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body px-5">
+                <div class="flex-row row px-1">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label class="mb-2" for="password">@rs.GetString("Password")</label>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-lock"></i></span>
+                                <input type="password" class="form-control" id="new-password2" placeholder="Escriba su nueva contraseña" aria-label="Contraseña" aria-describedby="basic-addon1">
+                                <span class="input-group-text" id="" onclick="cambiarIconoPassword(this,'new-password2')">
+                                    <i class="fa-solid fa-eye icon-blue"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label class="mb-2" for="password">Confirme su contraseña</label>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-lock"></i></span>
+                                <input type="password" class="form-control" id="confirm-new-password" placeholder="Confirme su nueva contraseña" aria-label="Contraseña" aria-describedby="basic-addon1">
+                                <span class="input-group-text" id="" onclick="cambiarIconoPassword(this,'confirm-new-password')">
+                                    <i class="fa-solid fa-eye icon-blue"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="container">
+                    <button id="nuevoUsuarioModal_close" type="button" class="btn btn-danger btn-block-modal" data-bs-dismiss="modal">@rs.GetString("Cancelar")</button>
+                    <button type="button" class="btn btn-info btn-block-modal" onclick="cambiarPasswordUsuario()">Cambiar contraseña</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalErrores" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Su usuario tiene los soguientes errores:</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body px-4">
+                <div class="flex-row row mt-3">
+                    <div class="col">
+                        <div class="" id="Scroll">
+                            <table class="table table-sm table-responsive w-100 d-block d-xl-table table-bordered table-striped selector dt-body-center pt-3" id="tablaErrores" style="width:100%">
+                                <thead class="dark-thead">
+                                    <tr>
+                                        <th class="">Descripcion</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="container">
+                    <button id="" type="button" class="btn btn-danger btn-block-modal" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+
+        var urlActualizarToken = '@Url.Action("Actualizar_Token", "Condusef", new { Area = "" })';
+        var urlDescargarProductos = '@Url.Action("Descargar_Productos", "Condusef", new { Area = "" })';
+        var urlConsultaTablaUsuario = '@Url.Action("Consultar_Usuarios", "Condusef", new { area = "" })';
+        var urlGuardarUsuario = '@Url.Action("Guardar_Usuario", "Condusef", new { area = "" })';
+        var urlCambiarCorreoResponsable = '@Url.Action("Cambiar_Correo_Responsable", "Condusef", new { area = "" })';
+        var urlCambiarPasswordUsuario = '@Url.Action("Cambiar_Password_Usuario_Config", "Condusef", new { area = "" })';
+        var urlEliminarUsuario = '@Url.Action("Eliminar_Usuario", "Condusef", new { area = "" })';
+        var urlDesactivarUsuario = '@Url.Action("Desactivar_Usuario", "Condusef", new { area = "" })';
+        var urlGenerarSuperUsuario = '@Url.Action("Generar_Super_Usuario", "Condusef", new { area = "" })';
+        var urlActualizarDatosEmpresa = '@Url.Action("Actualizar_Datos_Empresa", "Condusef", new { area = "" })';
+
+        var textoScript = {
+            primero: `@Html.Raw(rs.GetString("TPrimero"))`,
+            anterior: `@Html.Raw(rs.GetString("TAnterior"))`,
+            siguiente: `@Html.Raw(rs.GetString("TSiguiente"))`,
+            ultimo: `@Html.Raw(rs.GetString("TUltimo"))`,
+            inicio: `@Html.Raw(rs.GetString("TInicio"))`,
+            mostrar: `@Html.Raw(rs.GetString("Mostrar"))`,
+            buscar: `@Html.Raw(rs.GetString("Buscar"))`,
+            buscando: `@Html.Raw(rs.GetString("Buscando"))`,
+            cargandoRegistros: `@Html.Raw(rs.GetString("CargandoRegistros"))`,
+            sinDatos: `@Html.Raw(rs.GetString("TSinDatos"))`,
+            noseencontraron: `@Html.Raw(rs.GetString("NoSeEncontraron"))`,
+
+            si: `@Html.Raw(rs.GetString("Si"))`,
+            no: `@Html.Raw(rs.GetString("No"))`,
+            eliminar: `@Html.Raw(rs.GetString("Eliminar"))`,
+            desactivar: `@Html.Raw(rs.GetString("Desactivar"))`,
+            activar: `@Html.Raw(rs.GetString("Activar"))`,
+            activo: `@Html.Raw(rs.GetString("Activo"))`,
+            desactivado: `@Html.Raw(rs.GetString("Desactivado"))`,
+            eliminarUsuario: `@Html.Raw(rs.GetString("PreguntaEliminarUsuario"))`,
+            pDesactivarUsuario: `@Html.Raw(rs.GetString("PreguntaDesactivarUsuario"))`,
+            pActivarUsuario: `@Html.Raw(rs.GetString("PreguntaActivarUsuario"))`,
+            noRevertir: `@Html.Raw(rs.GetString("NoRevertir"))`,
+            usuarioEliminado: `@Html.Raw(rs.GetString("MUsuarioEliminado"))`,
+            errorEliminarUsuario: `@Html.Raw(rs.GetString("ErrorEliminarUsuario"))`,
+            mUsuarioDesactivado: `@Html.Raw(rs.GetString("MUsuarioDesactivado"))`,
+            mErrorDesactivarUsuario: `@Html.Raw(rs.GetString("MErrorDesactivarUsuario"))`,
+            cambiarContrasena: `@Html.Raw(rs.GetString("CambiarContrasena"))`,
+            cambiarCorreo: `@Html.Raw(rs.GetString("CambiarCorreo"))`,
+            mErrorKeyInvalida: `@Html.Raw(rs.GetString("MErrorKeyInvalida"))`,
+
+
+            EmailLogin: `@Html.Raw(rs.GetString("EmailLogin"))`,
+            ErrorGenerico: `@Html.Raw(rs.GetString("ErrorGenerico"))`,
+            UsuarioCambio: `@Html.Raw(rs.GetString("UsuarioCambio"))`,
+            SolicitudCambio: `@Html.Raw(rs.GetString("SolicitudCambio"))`,
+            Validando: `@Html.Raw(rs.GetString("Validando"))`,
+            Ingresar: `@Html.Raw(rs.GetString("BtnLogin"))`,
+            errorLoginTitulo: `@Html.Raw(rs.GetString("MErrorLoginTitulo"))`,
+            errorLogin: `@Html.Raw(rs.GetString("MErrorLogin"))`,
+        }
+    </script>
+
+    <script src="~/js/Generales/fntGenericas.js"></script>
+    <script defer src="~/js/Condusef/configuracion.js"></script>
+}

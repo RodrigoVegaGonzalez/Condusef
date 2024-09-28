@@ -1,0 +1,87 @@
+﻿
+@{
+    var cultura = new System.Globalization.CultureInfo(@ViewData["Lang"].ToString() ?? "es");
+    var rm = new System.Resources.ResourceManager(typeof(IdiomaCondusef_DLL.Login.Login));
+    var rs = rm.GetResourceSet(cultura, true, true);
+}
+<!DOCTYPE html>
+<html lang="@ViewData["Lang"].ToString()">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="@ViewBag.Title" />
+    <meta name="theme-color" content="#fafafa" />
+    <title>@ViewBag.Title</title>
+    <link rel="icon" href="~/favicon.png" type="image/x-icon" />
+    <link  href="~/lib/font-awesome_6.4.2/css/all.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/dataTable/datatables.min.css" />
+    @Html.AntiForgeryToken()
+    <link rel="stylesheet" href="~/css/Shared/layout.css">
+    <link href="~/lib/select2/css/select2.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div id="loading-panel" class="loading-panel" style="display: none">
+        <div class="panel-container">
+            <span class="loader"></span>
+        </div>
+    </div>
+    <div class="wrapper">
+        <div class="container-fluid p-0">
+            <div id="content" class="container-fluid p-0">
+                <nav class="navbar navbar-expand-lg navbar-dark bg-light">
+                    <div class="container-fluid">
+                        <div class="collapse navbar-collapse " id="navbarNavDarkDropdown">
+                            <div class="right-btn__container ms-auto">
+                                <ul class="navbar-nav">
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle dropdown-btn" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="fa-solid fa-language icon"></i>
+                                        </a>
+                                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu">
+                                            <li><a class="dropdown-item" onclick="cambiarIdioma('es')">Español</a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item" onclick="cambiarIdioma('en')">English (beta)</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                                <ul class="navbar-nav">
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle dropdown-btn" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="fa-solid fa-circle-half-stroke icon"></i>
+                                        </a>
+                                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu">
+                                            <li><a class="dropdown-item" onclick="">Claro</a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item" onclick="">Oscuro</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+                <div class="container-fluid p-0" id="contenedorInicial">
+                    @RenderBody()
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="~/lib/jquery/dist/jquery-3.7.1.min.js"></script>
+    <script src="~/lib/select2/js/select2.min.js"></script>
+    <script src="~/lib/dataTable/datatables.min.js"></script>
+    <script src="~/lib/font-awesome_6.4.2/js/all.min.js"></script>
+    <script src="~/lib/sweetalert2/sweetalert2.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/Shared/layout.js"></script>
+    <script src="~/js/Shared/layoutApp.js"></script>
+
+</body>
+</html>
+
+<script type="text/javascript">
+        var urlCambiarIdioma = '@Url.Action("Cambiar_Idioma", "Home")';
+</script>
+
+@await RenderSectionAsync("Scripts", required: false)

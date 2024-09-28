@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34309.116
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Condusef", "Condusef.csproj", "{58EDD061-C3BA-40E1-B87C-95AD367A71D6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Condusef_DLL", "Condusef_DLL\Condusef_DLL.csproj", "{0953DA76-AA1B-4483-BB1D-1117A79BCF85}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{58EDD061-C3BA-40E1-B87C-95AD367A71D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58EDD061-C3BA-40E1-B87C-95AD367A71D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58EDD061-C3BA-40E1-B87C-95AD367A71D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58EDD061-C3BA-40E1-B87C-95AD367A71D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0953DA76-AA1B-4483-BB1D-1117A79BCF85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0953DA76-AA1B-4483-BB1D-1117A79BCF85}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0953DA76-AA1B-4483-BB1D-1117A79BCF85}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0953DA76-AA1B-4483-BB1D-1117A79BCF85}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0A55A45D-61F5-40A1-97C0-AFFBD630F765}
+	EndGlobalSection
+EndGlobal

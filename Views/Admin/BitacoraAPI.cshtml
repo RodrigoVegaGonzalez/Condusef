@@ -1,0 +1,189 @@
+﻿@using System.Globalization;
+@model Condusef_DLL.Funciones.Administracion.Administracion;
+@{
+    //var cultura = new CultureInfo(Request.Cookies["lang"].Value?.ToString() ?? "es");
+    var cultura = new CultureInfo("es");
+    var rm = new System.Resources.ResourceManager(typeof(IdiomaCondusef_DLL.Admin.Admin));
+    var rs = rm.GetResourceSet(cultura, true, true);
+
+    ViewBag.Title = "Bitacora API";
+    ViewBag.TituloCard = "";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="container-fluid p-0">
+    <div class="card">
+        <div class="card-body">
+            <div class="col">
+                <div class="col p-0">
+                    <div class="flex-row row">
+                        <div class="col-md-4 order-0">
+                            <div class="form-group">
+                                @Html.Label("", string.Format("{0}", rs.GetString("Empresa")), new { @class = "label-control", @for = "ddl_formatoReporte" })
+                                <div class="col nopadding p-0">
+                                    <div class="form-group select-container">
+                                        @Html.DropDownList("empresa", new SelectList(Model.ListadoEmpresas, "Id", "Descripcion"), string.Format("{0}", rs.GetString("SeleccionDeOpcion")), new { @class = "select-form selectitems form-control show-menu-arrow", @data_live_search = "true", @id = "empresa" })
+                                        <i class="fa-solid fa-caret-down"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 order-1">
+                            <div class="form-group">
+                                @Html.Label("", string.Format("{0}", rs.GetString("Servicio")), new { @class = "label-control", @for = "ddl_formatoReporte" })
+                                <div class="col nopadding p-0">
+                                    <div class="form-group select-container">
+                                        @Html.DropDownList("servicio", new SelectList(Model.ListadoServicios, "Id", "Descripcion"), string.Format("{0}", rs.GetString("SeleccionDeOpcion")), new { @class = "select-form selectitems form-control show-menu-arrow", @data_live_search = "true", @id = "servicio" })
+                                        <i class="fa-solid fa-caret-down"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 order-2">
+                            <button id="btn_buscar" class="btn btn-primary w-100 mt-4">@rs.GetString("Buscar")</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="flex-row row mt-3">
+                <div class="col">
+                    <div class="" id="Scroll">
+                        <table id="tablaLog" class="table table-sm table-responsive w-100 d-block d-xl-table table-bordered table-striped selector dt-body-center pt-3" style="width:100%">
+                            <thead class="dark-thead">
+                                <tr>
+                                    <th id="">Metodo</th>
+                                    <th id="">Codigo Error</th>
+                                    <th id="">Peticion</th>
+                                    <th id="">Error</th>
+                                    <th id="">Fecha</th>
+                                    <th id=""></th>
+                                    <th id=""></th>
+                                    <th id=""></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalDetalles" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">@rs.GetString("TModalDetalles")</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body px-4">
+                <div class="flex-row row my-2">
+                    <div class="col-7">
+                        <div class="form-group">
+                            @Html.Label("", string.Format("{0}", rs.GetString("Metodo")), new { @class = "label-control mb-2" })
+                            <div class="col nopadding">
+                                <div class="input-group">
+                                    <input class="form-control" id="metodo" disabled />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            @Html.Label("", string.Format("{0}", rs.GetString("CodigoError")), new { @class = "label-control mb-2" })
+                            <div class="col nopadding">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="codigoError" disabled />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            @Html.Label("", string.Format("{0}", rs.GetString("Fecha")), new { @class = "label-control mb-2" })
+                            <div class="col nopadding">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="fecha" disabled />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex-row row mt-3">
+                    <div class="col-12">
+                        <div class="form-group">
+                            @Html.Label("", string.Format("{0}", rs.GetString("Peticion")), new { @class = "label-control mb-2" })
+                            <div class="col nopadding">
+                                <div class="input-group">
+                                    <textarea id="peticion" class="form-control" rows="12" style="resize:none;" readonly></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex-row row mt-3">
+                    <div class="col-12">
+                        <div class="form-group">
+                            @Html.Label("", string.Format("{0}", rs.GetString("Error")), new { @class = "label-control mb-2" })
+                            <div class="col nopadding">
+                                <div class="input-group">
+                                    <textarea id="error" class="form-control" rows="12" style="resize:none;" readonly></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="container">
+                    <button id="" type="button" class="btn btn-danger btn-block-modal" data-bs-dismiss="modal">@rs.GetString("Cerrar")</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script type="text/javascript">
+
+        var urlConsultarLog = '@Url.Action("Consultar_Log_Empresa", "Admin", new { Area = "" })';
+
+        var textoScript = {
+            primero: `@Html.Raw(rs.GetString("TPrimero"))`,
+            anterior: `@Html.Raw(rs.GetString("TAnterior"))`,
+            siguiente: `@Html.Raw(rs.GetString("TSiguiente"))`,
+            ultimo: `@Html.Raw(rs.GetString("TUltimo"))`,
+            inicio: `@Html.Raw(rs.GetString("TInicio"))`,
+            mostrar: `@Html.Raw(rs.GetString("Mostrar"))`,
+            buscar: `@Html.Raw(rs.GetString("Buscar"))`,
+            buscando: `@Html.Raw(rs.GetString("Buscando"))`,
+            cargandoRegistros: `@Html.Raw(rs.GetString("CargandoRegistros"))`,
+            sinDatos: `@Html.Raw(rs.GetString("TSinDatos"))`,
+            noseencontraron: `@Html.Raw(rs.GetString("NoSeEncontraron"))`,
+
+            si: `@Html.Raw(rs.GetString("Si"))`,
+            no: `@Html.Raw(rs.GetString("No"))`,
+            eliminar: `@Html.Raw(rs.GetString("Eliminar"))`,
+            modificar: `@Html.Raw(rs.GetString("Modificar"))`,
+            verificar: `@Html.Raw(rs.GetString("Verificar"))`,
+            corregir: `@Html.Raw(rs.GetString("Corregir"))`,
+            verErrores: `@Html.Raw(rs.GetString("VerErrores"))`,
+            corregirQuejas: `@Html.Raw(rs.GetString("CorregirQuejas"))`,
+
+            mExitoEnvioQuejas: `@Html.Raw(rs.GetString("MExitoEnvioQuejas"))`,
+            mErrorEnvioQuejas: `@Html.Raw(rs.GetString("MErrorEnvioQuejas"))`,
+            mErrorEnvioQuejas2: `@Html.Raw(rs.GetString("MErrorEnvioQuejas2"))`,
+            mErrorSubida: `@Html.Raw(rs.GetString("MErrorSubida"))`,
+            mErrorCondusef: `@Html.Raw(rs.GetString("MErrorCondusef"))`,
+            error: `@Html.Raw(rs.GetString("Error"))`,
+            mEliminarRegistro: `@Html.Raw(rs.GetString("MEliminarRegistro"))`,
+            mRegistroEliminado: `@Html.Raw(rs.GetString("MRegistroEliminado"))`,
+        }
+    </script>
+
+    <script type="module" src="~/js/constantes.js"></script>
+    <script type="module" src="~/js/Admin/bitacoraAPI.js"></script>
+}

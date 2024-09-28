@@ -1,0 +1,93 @@
+﻿@using System.Globalization;
+
+@{
+    ViewBag.Title = "Login Admin";
+    ViewBag.TituloCard = "";
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+    //var cultura = new CultureInfo(Request.Cookies["lang"].Value?.ToString() ?? "es");
+    var cultura = new CultureInfo("es");
+    var rm = new System.Resources.ResourceManager(typeof(IdiomaCondusef_DLL.Login.Login));
+    var rs = rm.GetResourceSet(cultura, true, true);
+}
+@if (User.Identity.IsAuthenticated)
+{
+    <script type="text/javascript">window.location.href = '@Url.Action("Home", "Home", new {Area = "" })';</script>
+    @*<script type="text/javascript"> window.location.href='@Url.Action("Inicio_Comunes", "Inicio", new {Area = "ModulosComunes" })'; </script>*@
+}
+<br />
+<section id="loginForm" class="p-5">
+    @using (Html.BeginForm("", "", FormMethod.Post, new { @class = "form-group", role = "form", id = "formLogIn" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="container-fluid p-0">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger alert alert-danger" })
+            <div class="container p-3">
+                <table class="table table-bordered table-striped">
+                    <tr style="background-color:#2F4E7C">
+                        <th>
+                            <h3 class="text-center" style="color:aliceblue">@rs.GetString("Bienvenido"), Administrador</h3>
+                        </th>
+                    </tr>
+                    <tr style="background-color:#EDEEF0">
+                        <td class="p-3">
+                            <br />
+                            <h4 class="text-center">@rs.GetString("Titulo")</h4>
+                            <div hidden id="Error_" class="alert alert-danger">
+                                @*<label>*@
+                                @*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            </label><label class="control-label text-danger" id="Error"></label>*@
+                            </div>
+                            <div class="form-horizontal tab-content mb-3">
+                                @Html.Label(string.Empty, string.Format("{0}", rs.GetString("Usuario")), new { @class = "control-label", @for = "email" })
+                                <div class="input-group mt-2">
+                                    <div class="input-group-text">
+                                        <i class="fa-solid fa-user"></i>
+                                    </div>
+                                    <input id="email" class = "form-control" type = "email" />
+                                </div>
+                            </div>
+                            <div class="form-horizontal tab-content pass_show mb-3">
+                                @Html.Label(string.Empty, string.Format("{0}", rs.GetString("Password")), new { @class = "control-label", @for = "password" })
+                                <div class="input-group mt-2">
+                                    <div class="input-group-text">
+                                        <i class="fa-solid fa-lock"></i>
+                                    </div>
+                                    <input id="password" class="form-control" type="password" />
+                                </div>
+                            </div>
+                            <div class="form-horizontal tab-content mt-5">
+                                <div class="flex-row row">
+                                    <div class="col-12">
+                                        <button class="btn btn-primary btn-login btn-block w-100" type="button" id="btnLogin">@rs.GetString("BtnLogin")</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    }
+</section>
+
+@section Scripts {
+    <script type="text/javascript">
+
+        var urlIngresar = '@Url.Action("AdminLogin", "Home", new {Area = ""})';
+        var urlSolicitarCambio = '@Url.Action("Password_Solicitar_Cambio","Home",new { area=""})';
+        var textoScript = {
+            EmailLogin: `@Html.Raw(rs.GetString("EmailLogin"))`,
+            ErrorGenerico: `@Html.Raw(rs.GetString("ErrorGenerico"))`,
+            UsuarioCambio: `@Html.Raw(rs.GetString("UsuarioCambio"))`,
+            PasswordLogin: `@Html.Raw(rs.GetString("PasswordLogin"))`,
+            SolicitudCambio: `@Html.Raw(rs.GetString("SolicitudCambio"))`,
+            Validando: `@Html.Raw(rs.GetString("Validando"))`,
+            Ingresar: `@Html.Raw(rs.GetString("BtnLogin"))`,
+            errorLoginTitulo: `@Html.Raw(rs.GetString("MErrorLoginTitulo"))`,
+            errorLogin: `@Html.Raw(rs.GetString("MErrorLogin"))`,
+        }
+    </script>
+
+    <script src="~/js/Admin/adminLogin.js"></script>
+    @*@Scripts.RenderFormat("<script src='{0}' defer></script>", "~/scripts/home_login")*@
+}

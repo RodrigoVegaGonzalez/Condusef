@@ -1,0 +1,17 @@
+﻿:root {
+    --info100-blue: #0d55a2;
+    --info100-blue-hover: rgb(0,105,217);
+    --sidebar-gray: rgb(206,212,218);
+}
+
+.btn-primary {
+    background-color: var(--info100-blue) !important;
+}
+
+.btn-primary:hover {
+    background-color: var(--info100-blue-hover) !important;
+}
+
+.table-dark {
+    background-color: #252525 !important;
+}

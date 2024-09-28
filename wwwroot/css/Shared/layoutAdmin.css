@@ -1,0 +1,149 @@
+﻿:root {
+    --info100-blue: #0d55a2;
+    --info100-blue-hover: rgb(0,105,217);
+    --sidebar-gray: rgb(206,212,218);
+    --dark-thead: rgb(52,58,64);
+    --light-thead-text: rgb(245,245,245)
+}
+
+*{
+    padding: 0;
+    margin: 0;
+}
+
+.main-container{
+    width: 100%;
+    height: 100%;
+}
+
+/*.loading-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.panel-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+
+.loader {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    position: relative;
+    animation: rotate 1s linear infinite
+}
+
+.loader::before {
+    content: "";
+    box-sizing: border-box;
+    position: absolute;
+    inset: 0px;
+    border-radius: 50%;
+    border: 5px solid #FFF;
+    animation: prixClipFix 2s linear infinite;
+}
+
+.icon {
+    font-weight: 400;
+    color: rgb(30,48,80) !important;
+    font-size: 1.5em;
+}
+
+.dropdown-btn::after {
+    content: none;
+}
+
+#config-icon:hover {
+    animation: girar 3s linear infinite;
+}
+
+.right-btn__container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.right-btn__container > ul {
+    margin: 0 1em;
+}
+*/
+
+.btn-primary {
+    background-color: var(--info100-blue) !important;
+    border-color: var(--info100-blue) !important;
+}
+
+.btn-primary:hover {
+    background-color: var(--info100-blue-hover) !important;
+    border-color: var(--info100-blue-hover) !important;
+}
+
+.dark-thead {
+    background-color: var(--dark-thead);
+    color: var(--light-thead-text);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*@keyframes rotate {
+    100% {
+        transform: rotate(360deg)
+    }
+}
+
+@keyframes prixClipFix {
+    0% {
+        clip-path: polygon(50% 50%,0 0,0 0,0 0,0 0,0 0)
+    }
+
+    25% {
+        clip-path: polygon(50% 50%,0 0,100% 0,100% 0,100% 0,100% 0)
+    }
+
+    50% {
+        clip-path: polygon(50% 50%,0 0,100% 0,100% 100%,100% 100%,100% 100%)
+    }
+
+    75% {
+        clip-path: polygon(50% 50%,0 0,100% 0,100% 100%,0 100%,0 100%)
+    }
+
+    100% {
+        clip-path: polygon(50% 50%,0 0,100% 0,100% 100%,0 100%,0 0)
+    }
+}
+
+@keyframes girar {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}*/

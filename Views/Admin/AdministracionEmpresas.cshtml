@@ -1,0 +1,327 @@
+﻿@using System.Globalization;
+;
+@model Condusef_DLL.Funciones.Condusef.Empresa;
+@{
+    //var cultura = new CultureInfo(Request.Cookies["lang"].Value?.ToString() ?? "es");
+    var cultura = new CultureInfo("es");
+    var rm = new System.Resources.ResourceManager(typeof(IdiomaCondusef_DLL.Admin.Admin));
+    var rs = rm.GetResourceSet(cultura, true, true);
+
+    ViewBag.Title = "Administracion";
+    ViewBag.TituloCard = "";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="container-fluid py-0 px-5">
+    <div class="card ">
+        <div class="card-body">
+            <ul class="nav nav-tabs" id="listaNegraTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active tab-font" id="empresasNoRegistradas-tab" data-bs-toggle="tab" data-bs-target="#empresasNoRegistradas" role="tab" aria-controls="empresasNoRegistradas" aria-selected="true">@rs.GetString("EmpresasNoRegistradas")</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link tab-font" id="empresasActivas-tab" data-bs-toggle="tab" data-bs-target="#empresasActivas" role="tab" aria-controls="empresasActivas" aria-selected="false">@rs.GetString("EmpresasActivas")</a>
+                </li>
+            </ul>
+            <div class="tab-content" id="tabContent">
+                <div class="tab-pane fade p-3 show active" id="empresasNoRegistradas" role="tabpanel" aria-labelledby="empresasNoRegistradas-tab">
+                    <div class="flex-row row">
+                        <div class="col-12">
+                            <div id="divTabla">
+                                <table id="tablaEmpresasNoRegistradas" class="table table-sm table-responsive w-100 d-block d-xl-table table-bordered table-striped selector" style="width:100%">
+                                    <thead class="dark-thead">
+                                        <tr>
+                                            <th scope="col" hidden>id</th>
+                                            <th scope="col">@rs.GetString("NombreEmpresa")</th>
+                                            <th scope="col"></th>
+                                            <th scope="col"></th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade p-3" id="empresasActivas" role="tabpanel" aria-labelledby="empresasActivas-tab">
+                    <div class="flex-row row">
+                        <div class="col-12">
+                            <div id="divTabla">
+                                <table id="tablaEmpresasActivas" class="table table-sm table-responsive w-100 d-block d-xl-table table-bordered table-striped selector" style="width:100%">
+                                    <thead class="dark-thead">
+                                        <tr>
+                                            <th scope="col" hidden>id</th>
+                                            <th scope="col">@rs.GetString("NombreEmpresa")</th>
+                                            <th scope="col">@rs.GetString("Estatus")</th>
+                                            <th scope="col"></th>
+                                            <th scope="col"></th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalDetalles" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-dark" style="color:white">
+                <span class="modal-title"><strong>@rs.GetString("DetallesGrupo")</strong></span>
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
+                    <div class="flex-row row my-3">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                @Html.Label("", string.Format("{0}", rs.GetString("LabelNombreEmpresa")), new { @class = "label-control" })
+                                <div class="col nopadding">
+                                    <div class="input-group">
+                                        @Html.Editor("Nombre", new { htmlAttributes = new { @class = "form-control", @autocomplete = "off", @disabled = "disabled" } })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Html.Label("", string.Format("{0}", rs.GetString("LabelNombreCorto")), new { @class = "label-control" })
+                                <div class="col nopadding">
+                                    <div class="input-group">
+                                        @Html.Editor("NomCorto", new { htmlAttributes = new { @class = "form-control", @autocomplete = "off", @disabled = "disabled" } })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex-row row my-3">
+                        <div class="col-8">
+                            @Html.Label("", string.Format("{0}", rs.GetString("LabelSector")), htmlAttributes: new { @class = "control-label mb-2" })
+                            <div class="col nopadding">
+                                <div class="input-group">
+                                    @Html.Editor("Sector", new { htmlAttributes = new { @class = "form-control", @autocomplete = "off", @disabled = "disabled" } })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Html.Label("", string.Format("{0}", rs.GetString("LabelRfcEmpresa")), new { @class = "label-control" })
+                                <div class="col nopadding">
+                                    <div class="input-group">
+                                        @Html.Editor("RFC", new { htmlAttributes = new { @class = "form-control", @autocomplete = "off", @disabled = "disabled" } })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex-row row my-3">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Html.Label("", string.Format("{0}", rs.GetString("LabelContacto")), new { @class = "label-control" })
+                                <div class="col nopadding">
+                                    <div class="input-group">
+                                        @Html.Editor("PersonaContacto", new { htmlAttributes = new { @class = "form-control", @autocomplete = "off" } })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Html.Label("", string.Format("{0}", rs.GetString("LabelCorreoContacto")), new { @class = "label-control" })
+                                <div class="col nopadding">
+                                    <div class="input-group">
+                                        @Html.Editor("CorreoContacto", new { htmlAttributes = new { @class = "form-control", @autocomplete = "off" } })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Html.Label("", string.Format("{0}", rs.GetString("LabelTelefonoContacto")), new { @class = "label-control" })
+                                <div class="col nopadding">
+                                    <div class="input-group">
+                                        @Html.Editor("TelefonoContacto", new { htmlAttributes = new { @class = "form-control", @autocomplete = "off" } })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex-row row my-3">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                @Html.Label("", string.Format("{0}", rs.GetString("LabelDireccionCalle")), new { @class = "label-control" })
+                                <div class="col nopadding">
+                                    <div class="input-group">
+                                        @Html.Editor("DirCalle", new { htmlAttributes = new { @class = "form-control", @autocomplete = "off" } })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Html.Label("", string.Format("{0}", rs.GetString("LabelNumInterior")), new { @class = "label-control" })
+                                <div class="col nopadding">
+                                    <div class="input-group">
+                                        @Html.Editor("DirNumInt", new { htmlAttributes = new { @class = "form-control", @autocomplete = "off" } })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex-row row my-3">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Html.Label("", string.Format("{0}", rs.GetString("LabelNumExterior")), new { @class = "label-control" })
+                                <div class="col nopadding">
+                                    <div class="input-group">
+                                        @Html.Editor("DirNumExt", new { htmlAttributes = new { @class = "form-control", @autocomplete = "off" } })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Html.Label("", string.Format("{0}", rs.GetString("LabelColonia")), new { @class = "label-control" })
+                                <div class="col nopadding">
+                                    <div class="input-group">
+                                        @Html.Editor("DirColonia", new { htmlAttributes = new { @class = "form-control", @autocomplete = "off" } })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Html.Label("", string.Format("{0}", rs.GetString("LabelCodigoPostal")), new { @class = "label-control" })
+                                <div class="col nopadding">
+                                    <div class="input-group">
+                                        @Html.Editor("DirCP", new { htmlAttributes = new { @class = "form-control", @autocomplete = "off" } })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex-row row my-3">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Html.Label("", string.Format("{0}", rs.GetString("LabelMunicipio")), new { @class = "label-control" })
+                                <div class="col nopadding">
+                                    <div class="input-group">
+                                        @Html.Editor("DirMunicipio", new { htmlAttributes = new { @class = "form-control", @autocomplete = "off" } })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Html.Label("", string.Format("{0}", rs.GetString("LabelCiudad")), new { @class = "label-control" })
+                                <div class="col nopadding">
+                                    <div class="input-group">
+                                        @Html.EditorFor(model => model.DatosGeneralesPorEmpresa.DirCiudad, new { htmlAttributes = new { @class = "form-control", @id = "DirCiudad", @autocomplete = "off" } })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            @Html.Label("", string.Format("{0}", rs.GetString("Estado")), htmlAttributes: new { @class = "control-label mb-2" })
+                            <div class="col nopadding">
+                                <div class="input-group">
+                                    @Html.DropDownList("Estado", new SelectList(Model.estados, "Id", "Descripcion"), string.Format("{0}", rs.GetString("SeleccionDeOpcion")), new { @class = "select-form selectitems ", @disabled = "disabled" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>                   
+                </div>
+                <div class="modal-footer">
+                    <div class="col-12">
+                        <button type="button" id="RegresarDetalle" class="btn btn-danger btn-block-modal" data-bs-dismiss="modal">@rs.GetString("Regresar")</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modalEnviarSolicitud" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group col-12">
+                    @Html.Label("", string.Format("{0}", rs.GetString("Email")), htmlAttributes: new { @class = "control-label" })
+                    <div class="col nopadding">
+                        <div class="input-group">
+                            @Html.Editor("EmailSolicitud", new { htmlAttributes = new { @class = "form-control", @autocomplete = "off" } })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-block" data-bs-dismiss="modal">@rs.GetString("Cerrar")</button>
+                <button id="enviar-btn" type="button" class="btn btn-primary btn-block">@rs.GetString("EnviarSolicitud")</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+
+        var urlHabilitarEmpresa = '@Url.Action("Habilitar_Empresa", "Admin", new { Area = "" })';
+        var urlConsultarEmpresasNoRegistradas = '@Url.Action("Consultar_Empresas_No_Registradas", "Admin", new { Area = "" })';
+        var urlConsultarEmpresasActivas = '@Url.Action("Consultar_Empresas_Activas", "Admin", new { Area = "" })';
+        var urlConsultarInfoEmpresa = '@Url.Action("Mostrar_Informacion_Empresa", "Admin", new { Area = "" })';
+        var urlEnviarSolicitud = '@Url.Action("Ingresar", "Home", new {Area = ""})';
+        var urlSolicitarCambio = '@Url.Action("Password_Solicitar_Cambio","Home",new { area=""})';
+        var textoScript = {
+            primero: `@Html.Raw(rs.GetString("TPrimero"))`,
+            anterior: `@Html.Raw(rs.GetString("TAnterior"))`,
+            siguiente: `@Html.Raw(rs.GetString("TSiguiente"))`,
+            ultimo: `@Html.Raw(rs.GetString("TUltimo"))`,
+            inicio: `@Html.Raw(rs.GetString("TInicio"))`,
+            mostrar: `@Html.Raw(rs.GetString("Mostrar"))`,
+            buscar: `@Html.Raw(rs.GetString("Buscar"))`,
+            buscando: `@Html.Raw(rs.GetString("Buscando"))`,
+            cargandoRegistros: `@Html.Raw(rs.GetString("CargandoRegistros"))`,
+            sinDatos: `@Html.Raw(rs.GetString("TSinDatos"))`,
+            noseencontraron: `@Html.Raw(rs.GetString("NoSeEncontraron"))`,
+
+            si: `@Html.Raw(rs.GetString("Si"))`,
+            no: `@Html.Raw(rs.GetString("No"))`,
+            eliminar: `@Html.Raw(rs.GetString("Eliminar"))`,
+            detalles: `@Html.Raw(rs.GetString("Detalles"))`,
+            mostrar: `@Html.Raw(rs.GetString("MostrarDatos"))`,
+            activar: `@Html.Raw(rs.GetString("Activar"))`,
+            empresaActiva: `@Html.Raw(rs.GetString("EmpresaActiva"))`,
+            empresaBloqueada: `@Html.Raw(rs.GetString("EmpresaBloqueada"))`,
+            btnActivarEmpresa: `@Html.Raw(rs.GetString("BtnActivarEmpresa"))`,
+            btnDesactivarEmpresa: `@Html.Raw(rs.GetString("BtnDesactivarEmpresa"))`,
+            btnHabilitarEmpresa: `@Html.Raw(rs.GetString("BtnHabilitarEmpresa"))`,
+
+            mActivarEmpresa: `@Html.Raw(rs.GetString("MActivarEmpresa"))`,
+            mEmpresaHabilitada: `@Html.Raw(rs.GetString("MEmpresaHabilitada"))`,
+            mErrorEmpresaHabilitada: `@Html.Raw(rs.GetString("MErrorEmpresaHabilitada"))`,
+            mErrorTitulo: `@Html.Raw(rs.GetString("MErrorTitulo"))`,
+            mExitoTitulo: `@Html.Raw(rs.GetString("MExitoTitulo"))`,
+
+            EmailLogin: `@Html.Raw(rs.GetString("EmailLogin"))`,
+            ErrorGenerico: `@Html.Raw(rs.GetString("ErrorGenerico"))`,
+            ErrorGenerico: `@Html.Raw(rs.GetString("ErrorGenerico"))`,
+            UsuarioCambio: `@Html.Raw(rs.GetString("UsuarioCambio"))`,
+            PasswordLogin: `@Html.Raw(rs.GetString("PasswordLogin"))`,
+            SolicitudCambio: `@Html.Raw(rs.GetString("SolicitudCambio"))`,
+            Validando: `@Html.Raw(rs.GetString("Validando"))`,
+            Ingresar: `@Html.Raw(rs.GetString("BtnLogin"))`,
+            errorLoginTitulo: `@Html.Raw(rs.GetString("MErrorLoginTitulo"))`,
+            errorLogin: `@Html.Raw(rs.GetString("MErrorLogin"))`,
+        }
+    </script>
+
+    <script src="~/js/Admin/administracionEmpresas.js"></script>
+}
+

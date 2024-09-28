@@ -1,0 +1,36 @@
+﻿/*:root {
+    --info100-blue: #0d55a2;
+    --info100-blue-hover: rgb(0,105,217);
+    --sidebar-gray: rgb(206,212,218);
+}
+
+.btn-login {
+    background-color: var(--info100-blue) !important;
+    color: white;
+}
+
+.btn-login:hover {
+    background-color: var(--info100-blue-hover) !important;
+    color: white;
+}
+
+.login-footer{
+    display: flex;
+    align-items: center;
+    place-content: center;
+    margin: 1.5em 0 .5em 0;
+}
+
+a{
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.center-content{
+    display: flex;
+    place-content: center;
+    align-content: center;
+}*/

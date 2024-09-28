@@ -1,0 +1,329 @@
+﻿@using System.Globalization;
+
+@model Condusef_DLL.Funciones.Condusef.Empresa
+@{
+    ViewBag.Title = "Administracion";
+    ViewBag.TituloCard = "";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    //var cultura = new CultureInfo(Request.Cookies["lang"].Value?.ToString() ?? "es");
+    var cultura = new CultureInfo("es");
+    var rm = new System.Resources.ResourceManager(typeof(IdiomaCondusef_DLL.Configuracion.Configuracion));
+    var rs = rm.GetResourceSet(cultura, true, true);
+}
+
+<style>
+    .copy-btn:hover{
+        background-color: rgb(92,99,106);
+    }
+</style>
+
+<div>
+    <h1>Panel de administración</h1>
+
+    <button class="btn btn-warning" id="btn_cp">Obtener cp</button>
+    @* <button class="btn btn-info" id="btn_agregarEmpresa" data-bs-toggle="modal" data-bs-target="#modalAgregarEmpresa">Agregar empresa</button> *@
+    @* <button class="btn btn-primary" id="btn_datosUsuarios" data-bs-toggle="modal" data-bs-target="#modalDatosUsuario">Mostrar usuario</button> *@
+    <button class="btn btn-danger" id="btn_cambiarTokenUsuario" data-bs-toggle="modal" data-bs-target="#modalTokenUsuario">Cambiar token usuario</button>
+    <button class="btn btn-success" id="btn_obtenerTokenUsuario" data-bs-toggle="modal" data-bs-target="#modalTokenUsuario2">Obtener token usuario</button>
+    <button class="btn btn-secondary" id="btn_subirProductosReune" data-bs-toggle="modal" data-bs-target="#modalProductosReune">Subir Productos Reune</button>
+</div>
+
+<div class="modal fade" id="modalAgregarEmpresa" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Dar alta empresa</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="flex-row row my-3">
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <label class="label-control">Nombre de la empresa</label>
+                            <div class="col nopadding">
+                                <div class="input-group">
+                                    <input class = "form-control" id = "Nombre" required />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="label-control">Nombre corto</label>
+                            <div class="col nopadding">
+                                <div class="input-group">
+                                    <input class="form-control" id="NomCorto" style="text-transform: lowercase" required />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex-row row my-3">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="label-control">RFC de la empresa</label>
+                            <div class="col nopadding">
+                                <div class="input-group">
+                                    <input class="form-control" id="RFC" required />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="label-control">Clave CASFIM</label>
+                            <div class="col nopadding">
+                                <div class="input-group">
+                                    <input class="form-control" id="CASFIM" required />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="label-control">Token Redeco</label>
+                            <div class="col nopadding">
+                                <div class="input-group">
+                                    <input class="form-control" id="TokenRedeco" required />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @* <div class="flex-row row my-3">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="label-control">Token Redeco</label>
+                            <div class="col nopadding">
+                                <div class="input-group">
+                                    <input class="form-control" id="TokenRedeco" required />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            @Html.Label("", string.Format("{0}", rs.GetString("LabelCASFIM")), new { @class = "label-control" })
+                            <div class="col nopadding">
+                                <div class="input-group">
+                                    <input class="form-control" id="CASFIM" required />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> *@
+            </div>
+            <div class="modal-footer">
+                <div class="container">
+                    <button id="btn_agregarEmpresa_close" type="button" class="btn btn-danger btn-block-modal" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary btn-block-modal" id="btn_guardarEmpresa">Agregar empresa</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalDatosUsuario" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Dar alta empresa</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="flex-row row my-3">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label class="label-control">Usuario</label>
+                            <div class="col nopadding">
+                                <div class="input-group">
+                                    <input class="form-control" id="usuario"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label class="label-control">Contraseña</label>
+                            <div class="col nopadding">
+                                <div class="input-group">
+                                    <input class="form-control" id="password"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="container">
+                    <button id="btn_datosUsuario_close" type="button" class="btn btn-danger btn-block-modal" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalTokenUsuario" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Cambiar token usuario</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="flex-row row my-3">
+                    <div class="col-9">
+                        <div class="form-group">
+                            <label class="label-control">Id Usuario</label>
+                            <div class="col nopadding">
+                                <div class="input-group">
+                                    <input class="form-control" id="id-usuario" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label class="label-control">Servicio</label>
+                            <select class="form-control" id="servicio" name="opciones">
+                                <option value="1">REDECO</option>
+                                <option value="2">REUNE</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex-row row my-3">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label class="label-control">Token</label>
+                            <div class="col nopadding">
+                                <div class="input-group">
+                                    <input class="form-control" id="token" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="container">
+                    <button id="btn_datosUsuario_close" type="button" class="btn btn-danger btn-block-modal" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary btn-block-modal" id="btn_cambiarToken">Cambiar token</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalTokenUsuario2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Cambiar token usuario</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="flex-row row my-3">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label class="label-control">Id Usuario</label>
+                            <div class="col nopadding">
+                                <div class="input-group">
+                                    @* <input class="form-control" id="" /> *@
+                                    @Html.DropDownList("id-usuario2", new SelectList(Model.ListadoUsuarios, "Id", "Descripcion"), string.Format("{0}", rs.GetString("SeleccionDeOpcion")), new { @class = "select-form selectitems form-control", @id = "id-usuario2", @data_live_search = "true", @data_live_search_normalize = "true" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label class="label-control">Servicio</label>
+                            <select class="form-control" id="servicio2" name="opciones">
+                                <option value="1">REDECO</option>
+                                <option value="2">REUNE</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-3 centrar-elemento-div">
+                        <button id="btn_obtenerToken" class="btn btn-info centrar-elemento btn-block-modal">Obtener</button>
+                    </div>
+                </div>
+                <div class="flex-row row my-3">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label class="label-control">Token</label>
+                            <div class="col nopadding">
+                                <div class="input-group">
+                                    <input class="form-control" id="token2" />
+                                    <span class="input-group-text copy-btn" id="copy-token"><i class="fa-solid fa-copy"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="container">
+                    <button id="btn_datosUsuario_close" type="button" class="btn btn-danger btn-block-modal" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="modalProductosReune" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Subir Excel</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group col-12" id="Archivo_Amorti">
+                    @Html.Label("", string.Format("{0}", "Cargar archivo"), new { @class = "control-label" })
+                    <div class="col nopadding input-group">
+                        <label class="input-group-btn">
+                            <span class="btn btn-primary">
+                                Buscar &hellip;<input class="w-75" type="file" style="display: none;" id="labelinput" name="UploadedFile" accept=".xlsx,.xls," onchange='CambiaFakePath(this)' />
+                            </span>
+
+                        </label>
+                        <input class="file-path form-control" type="text" id="inputname" readonly>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="container">
+                    <button id="btn_datosUsuario_close" type="button" class="btn btn-danger btn-block-modal" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary btn-block-modal" id="subirLayoutBtn">Subir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script type="text/javascript">
+
+        var urlAgregarEmpresa = '@Url.Action("Agregar_Empresa", "Admin", new { Area = "" })';
+        var urlCambiarTokenUsuario = '@Url.Action("Cambiar_Token_Usuario", "Admin", new { Area = "" })';
+        var urlObtenerTokenUsuario = '@Url.Action("Obtener_Token_Usuario", "Admin", new { Area = "" })';
+        var urlCatalogoCP = '@Url.Action("Obtener_Catalogo_CP", "Admin", new {Area = ""})';
+        var urlSubirCatalogoProdReune = '@Url.Action("Subir_Catalogo_Productos_Reune", "Admin", new { area = "" })';
+        var textoScript = {
+            EmailLogin: `@Html.Raw(rs.GetString("EmailLogin"))`,
+            ErrorGenerico: `@Html.Raw(rs.GetString("ErrorGenerico"))`,
+            UsuarioCambio: `@Html.Raw(rs.GetString("UsuarioCambio"))`,
+            PasswordLogin: `@Html.Raw(rs.GetString("PasswordLogin"))`,
+            SolicitudCambio: `@Html.Raw(rs.GetString("SolicitudCambio"))`,
+            Validando: `@Html.Raw(rs.GetString("Validando"))`,
+            Ingresar: `@Html.Raw(rs.GetString("BtnLogin"))`,
+            errorLoginTitulo: `@Html.Raw(rs.GetString("MErrorLoginTitulo"))`,
+            errorLogin: `@Html.Raw(rs.GetString("MErrorLogin"))`,
+        }
+    </script>
+
+    <script src="~/js/Admin/admin.js"></script>
+    @*@Scripts.RenderFormat("<script src='{0}' defer></script>", "~/scripts/home_login")*@
+}

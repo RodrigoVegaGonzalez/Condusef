@@ -1,0 +1,391 @@
+﻿:root {
+    --info100-blue: #0d55a2;
+    --info100-blue-hover: rgb(0,105,217);
+    --sidebar-gray: rgb(206,212,218);
+    --dark-thead: rgb(52,58,64);
+    --light-thead-text: rgb(245,245,245);
+    --sidebar-background: rgb(79,81,86);
+    --sidebar-background-sw: rgba(79,81,86,0.2);
+
+}
+
+*{
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+.content {
+    flex: 1;
+    /* Puedes agregar padding o margin si es necesario */
+}
+
+.footer {
+    background-color: var(--dark-thead); /* Color de fondo del footer */
+    color: white; /* Color del texto del footer */
+    text-align: center; /* Alineación del texto */
+    padding: 10px; /* Espaciado interno */
+    height: 50px; /* Altura específica del footer */
+    box-sizing: border-box; /* Para incluir el padding en la altura total */
+}
+
+/*--------------------------------------------------- Estilos Generales ---------------------------------------------------*/
+
+
+/*Elementos*/
+a.aUser:active {
+    background: rgba(74,74,75,0.3) !important;
+    color: #000 !important;
+}
+
+.dataTables_filter {
+    margin: 0 0 1rem 0;
+}
+
+/*Botones*/
+
+.btn-primary, .btn-login {
+    background-color: var(--info100-blue) !important;
+    color: white;
+}
+
+    .btn-primary:hover, .btn-login:hover {
+        background-color: var(--info100-blue-hover) !important;
+        color: white;
+    }
+
+.btn-info {
+    background-color: rgb(22,98,111) !important;
+    border-color: rgb(22,98,111) !important;
+    color: white;
+}
+
+    .btn-info:hover {
+        background-color: rgb(19,132,150) !important;
+        border-color: rgb(19,132,150) !important;
+    }
+
+.btn-light {
+    border: 1px solid rgb(178,178,178);
+}
+
+.btn-block {
+    display: block;
+    width: 100%;
+}
+
+.btn-block-modal {
+    display: inline-block;
+    width: 100%;
+    margin: 0 0.5rem;
+}
+
+.btn-rounded-mid {
+    border-top-left-radius: 0.375rem !important;
+    border-bottom-left-radius: 0.375rem !important;
+}
+
+.btn-warning {
+    color: #000 !important;
+}
+
+/*Botones dataTable*/
+.dt-buttons {
+    position: relative !important;
+    display: inline-flex !important;
+    vertical-align: middle !important;
+}
+
+    .dt-buttons > .dt-button {
+        position: relative !important;
+        flex: 1 1 auto !important;
+    }
+
+        .dt-buttons > .dt-button:not(:first-child):not(:last-child) {
+            /* Estilos para los botones del medio */
+            border-radius: 0 !important;
+        }
+        .dt-buttons > .dt-button:first-child {
+            /* Estilos para los botones del medio */
+            border-radius: 0 !important;
+            border-start-start-radius: .25rem !important;
+            border-end-start-radius: .25rem !important;
+        }
+        .dt-buttons > .dt-button:last-child {
+            /* Estilos para los botones del medio */
+            border-radius: 0 !important;
+            border-start-end-radius: .25rem !important;
+            border-end-end-radius: .25rem !important;
+        }
+
+.dt-button.buttons-html5 {
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    vertical-align: middle;
+    border: 1px solid #6c757d !important;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #fff !important;
+    background: #6c757d !important;
+    margin: 0 !important;
+}
+
+.dt-button.buttons-html5:hover {
+    background-color: rgb(92,99,106) !important;
+}
+
+    .dt-button.buttons-html5:active {
+        outline: none !important;
+    }
+
+
+/*Select2.js*/
+.container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.select2-container {
+    z-index: 99999;
+    min-width: 100%;
+    max-width: 100%;
+}
+
+.select-form {
+    width: 100% !important;
+}
+/*.select2.select2-container.select2-container--default.select-form {
+    display: none;
+}*/
+
+/*.select2-selection__rendered {
+    display: none;
+}*/
+/*
+.select2-selection__rendered {
+    display: block !important;
+}*/
+
+/*Iconos*/
+.icon {
+    font-weight: 400;
+    /*color: rgb(30,48,80)!important;*/
+    color: rgb(74,74,75) !important;
+    font-size: 1.5em;
+}
+
+.icon-blue:hover{
+    color: var(--info100-blue-hover);
+}
+
+.check-btn{
+    background-color: var(--info100-blue);
+    color: white;
+}
+
+.check-btn:hover {
+    background-color: var(--info100-blue-hover);
+    color: white;
+}
+
+.dropdown-btn::after {
+    content: none;
+}
+
+#config-icon:hover {
+    animation: girar 3s linear infinite;
+}
+
+/* Carousel */
+
+.carousel-control-icon {
+    color: var(--dark-thead);
+    font-size: 10rem;
+}
+
+.background-carousel-indicators{
+    background-color: var(--dark-thead);
+    opacity: 0.5;
+}
+
+
+
+/*Sidebar*/
+.right-btn__container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.right-btn__container > ul{
+    margin: 0 1em;
+}
+
+.sidebar-btn {
+    margin: 0 0 0 1.5em;
+    border: 1px solid var(--sidebar-gray)
+}
+
+.loading-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.panel-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+
+.loader {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    position: relative;
+    animation: rotate 1s linear infinite
+}
+
+.loader::before {
+    content: "";
+    box-sizing: border-box;
+    position: absolute;
+    inset: 0px;
+    border-radius: 50%;
+    border: 5px solid #FFF;
+    animation: prixClipFix 2s linear infinite;
+}
+
+.dark-thead {
+    background-color: var(--dark-thead);
+    color: var(--light-thead-text);
+}
+
+table tbody tr:hover {
+    background-color: rgb(200,230,255); /* Cambia el color de fondo según lo que desees */
+}
+
+/*Textos*/
+
+.text-center{
+    text-align: center;
+}
+
+.text-center-v{
+    align-items: center;
+}
+
+/*Clases Estilos*/
+.centrar-elemento-div{
+    align-content: center;
+    display: block;
+}
+
+.centrar-elemento{
+    margin: 0 auto;
+}
+
+.table__th {
+    font-size: 1rem !important;
+    vertical-align: middle;
+}
+
+.show-menu-arrow {
+    position: relative;
+    padding-right: 20px; /* Espacio para el ícono */
+}
+
+    .show-menu-arrow::after {
+        content: "\f0d7"; /* Código unicode del ícono de la caret-down de Font Awesome */
+        font-family: "Font Awesome 5 Free"; /* Asegúrate de que la fuente esté cargada */
+        font-weight: 900; /* Peso de la fuente */
+        position: absolute;
+        right: 10px; /* Margen entre el ícono y el borde derecho del contenedor */
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+.select-container {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+    .select-container select {
+        width: 100%;
+        padding-right: 40px; /* Espacio para el ícono */
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+    }
+
+    .select-container .fa-caret-down {
+        position: absolute;
+        right: 10px; /* Margen entre el ícono y el borde derecho del contenedor */
+        top: 50%;
+        transform: translateY(-50%);
+        pointer-events: none; /* Para que no interfiera con las interacciones del select */
+    }
+
+
+@keyframes rotate {
+    100% {
+        transform: rotate(360deg)
+    }
+}
+
+@keyframes prixClipFix {
+    0% {
+        clip-path: polygon(50% 50%,0 0,0 0,0 0,0 0,0 0)
+    }
+
+    25% {
+        clip-path: polygon(50% 50%,0 0,100% 0,100% 0,100% 0,100% 0)
+    }
+
+    50% {
+        clip-path: polygon(50% 50%,0 0,100% 0,100% 100%,100% 100%,100% 100%)
+    }
+
+    75% {
+        clip-path: polygon(50% 50%,0 0,100% 0,100% 100%,0 100%,0 100%)
+    }
+
+    100% {
+        clip-path: polygon(50% 50%,0 0,100% 0,100% 100%,0 100%,0 0)
+    }
+}
+
+/* Define la animación de rotación llamada "girar" */
+@keyframes girar {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+

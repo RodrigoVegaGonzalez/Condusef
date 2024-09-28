@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notificación Credenciales</title>
+    <style>
+        .btn{
+            margin: .25rem .125rem;
+            background-color: #0d6efd;
+            border: 1px solid #0d6efd;
+            border-radius: 0.375rem;
+            font-size: 1rem;
+            font-weight: 400;
+            padding: 0.375rem 0.75rem;
+            text-decoration: none;
+            color: white!important;
+            font-family: monospace;
+        }
+        .btn:hover{
+            background-color: rgb(11,94,215);
+        }
+        .nota{
+            color: #3b3b3b;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <p>Estimado $NombreDestinatario$, de la empresa <i>$Empresa$</i>.</p>
+    <p>Le informamos que ya ha sido habilitado para utilizar nuestro sistema de gestión de la API de la CONDUSEF.</p>
+    <p>Estas son las credenciales de su usuario adminsitrador:</p>
+    <p>Usuario: <b>$Usuario$</b></p>
+    <p>Contraseña: <b>$Password$</b></p>
+    
+    <p>Puede acceder a nuestro sistema por medio del siguiente botón</p>
+    <a class="btn" href="http://localhost:53386/" target="_blank">Inicie sesión</a>
+
+    <p>Cualquier duda puede contactarnos al correo: algo@algo.com</p>
+</body>
+</html>

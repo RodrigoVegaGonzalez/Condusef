@@ -1,0 +1,49 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\js\Admin\bitacoraAPI.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\js\Admin\bitacoraAPI.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+    <PackageReference Include="EPPlus" Version="7.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.6" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.6.2" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Documentos\Temp\" />
+    <Folder Include="Documentos\Plantillas\Correos\" />
+    <Folder Include="wwwroot\js\Reune\Consultas\" />
+    <Folder Include="wwwroot\layouts\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\js\Admin\bitacoraAPI.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="BD_DLL">
+      <HintPath>..\Condusef_DLL\bin\Debug\net8.0\BD_DLL.dll</HintPath>
+    </Reference>
+    <Reference Include="Condusef_DLL">
+      <HintPath>..\Condusef_DLL\bin\Debug\net8.0\Condusef_DLL.dll</HintPath>
+    </Reference>
+    <Reference Include="IdiomaCondusef_DLL">
+      <HintPath>..\..\..\..\..\..\source\repos\RodrigoVegaGonzalez\Condusef\DLL\IdiomaCondusef_DLL.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
